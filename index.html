@@ -1,104 +1,483 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mahdi Yussuf Abdi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 14: Truss Analysis Using the Stiffness Method</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;800&family=Roboto+Mono:wght@400;700&display=swap');
 
-<style>
-body{
-font-family:Arial,sans-serif;
-margin:0;
-background:#f5f7fa;
-color:#333;
-}
+        :root {
+            --bg-color: #0d1117;
+            --panel-bg: #161b22;
+            --primary: #3b82f6;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --white: #ffffff;
+            --border: #30363d;
+        }
 
-header{
-background:#0f4c81;
-color:white;
-padding:50px;
-text-align:center;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-section{
-max-width:1000px;
-margin:auto;
-padding:30px;
-}
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #010409;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-.card{
-background:white;
-padding:20px;
-margin:15px 0;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
+        .deck-container {
+            width: 95vw;
+            max-width: 1400px;
+            height: 85vh;
+            max-height: 850px;
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-h2{
-color:#0f4c81;
-}
+        .grid-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
 
-footer{
-background:#0f4c81;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:30px;
-}
-</style>
+        .slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 50px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: scale(0.95) translateY(20px);
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        h2 span {
+            color: var(--primary);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.3rem;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 5px 12px;
+            border-radius: 8px;
+        }
+
+        p, li {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        strong { color: var(--white); }
+
+        ul { padding-left: 25px; list-style-type: none; }
+        ul li::before {
+            content: "▹";
+            color: var(--primary);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .citation {
+            font-size: 0.85em;
+            color: var(--primary);
+            vertical-align: super;
+            margin-left: 2px;
+            opacity: 0.8;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .math-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: #a5b4fc;
+            margin: 15px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+            overflow-x: auto;
+        }
+
+        .math-panel:hover { transform: translateX(5px); border-left-color: var(--secondary); }
+        .math-accent { color: var(--accent); }
+        .math-matrix { display: inline-grid; vertical-align: middle; padding: 0 10px; border-left: 2px solid #a5b4fc; border-right: 2px solid #a5b4fc; border-radius: 4px; text-align: center; gap: 8px;}
+
+        .graphic-container {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            background: var(--panel-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-callout {
+            background: rgba(245, 158, 11, 0.05); border: 2px dashed var(--accent);
+            padding: 25px; border-radius: 12px; text-align: center;
+            margin-top: 20px; margin-bottom: 20px;
+        }
+
+        .controls {
+            position: absolute; bottom: 30px; right: 40px; display: flex; gap: 15px; z-index: 100;
+        }
+        .btn-nav {
+            background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border);
+            width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center;
+            cursor: pointer; transition: all 0.3s; font-size: 1.2rem;
+        }
+        .btn-nav:hover:not(:disabled) { background: var(--primary); color: var(--white); border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+        
+        .progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: var(--panel-bg); z-index: 100; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.4s ease; }
+        .slide-counter { position: absolute; bottom: 45px; left: 40px; font-family: 'Roboto Mono'; color: var(--text-muted); font-size: 1.1rem; }
+
+        /* Animation Classes */
+        .fade-up { opacity: 0; transform: translateY(20px); }
+        .slide.active .fade-up { animation: fadeUpAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; }
+        @keyframes fadeUpAnim { to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-
 <body>
 
-<header>
-<h1>Mahdi Yussuf Abdi</h1>
-<p>Civil Engineer | PMP | PMI-CP | Program Manager</p>
-</header>
+    <div class="deck-container">
+        <div class="grid-bg"></div>
 
-<section>
+        <div class="slide active">
+            <div style="text-align: center; margin: auto;">
+                <h2 style="justify-content: center; border:none; margin-bottom: 10px;"><span>Chapter 14</span></h2>
+                <h1>Truss Analysis Using the Stiffness Method</h1>
+                <p class="fade-up delay-1" style="font-size: 1.5rem; max-width: 800px; margin: 0 auto;">
+                    A comprehensive expansion into matrix displacement methodologies, thermal effects, and space trusses <span class="citation">[cite: 1, 1106, 1290]</span>.
+                </p>
+                <div class="graphic-container fade-up delay-2" style="background: transparent; border: none; height: 250px; margin-top: 40px;">
+                    <svg viewBox="0 0 600 200" width="600" height="200">
+                        <line x1="100" y1="150" x2="300" y2="50" stroke="#3b82f6" stroke-width="4" />
+                        <line x1="300" y1="50" x2="500" y2="150" stroke="#3b82f6" stroke-width="4" />
+                        <line x1="100" y1="150" x2="500" y2="150" stroke="#3b82f6" stroke-width="4" />
+                        <line x1="100" y1="150" x2="300" y2="150" stroke="#3b82f6" stroke-width="4" />
+                        <circle cx="100" cy="150" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
+                        <circle cx="300" cy="50" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
+                        <circle cx="500" cy="150" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
+                        <circle cx="300" cy="150" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
+                    </svg>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<h2>About Me</h2>
-<p>
-Senior WASH and Infrastructure Project Manager with extensive experience in
-water resources, infrastructure development, project management,
-construction supervision, and climate-resilient projects.
-</p>
-</div>
+        <div class="slide">
+            <h2><span>14.1</span> Fundamentals of the Stiffness Method</h2>
+            <div class="layout-grid">
+                <div>
+                    <p class="fade-up delay-1">The stiffness method is a displacement method <span class="citation">[cite: 9]</span>. It can be used to analyze both statically determinate and statically indeterminate structures, giving it a universal advantage over the flexibility method <span class="citation">[cite: 12]</span>.</p>
+                    <ul class="fade-up delay-2">
+                        <li><strong>Kinematic Indeterminacy:</strong> Unconstrained displacements represent the primary unknowns <span class="citation">[cite: 42]</span>.</li>
+                        <li><strong>Degrees of Freedom (DOF):</strong> Generally, there are two degrees of freedom for each joint <span class="citation">[cite: 43]</span>.</li>
+                    </ul>
+                    <div class="math-panel fade-up delay-3">
+                        <strong>Code Numbering Rule:</strong><br>
+                        Lowest numbers = Unknown displacements (unconstrained DOFs) <span class="citation">[cite: 48]</span>.<br>
+                        Highest numbers = Known displacements (constrained DOFs) <span class="citation">[cite: 48]</span>.
+                    </div>
+                </div>
+                <div class="graphic-container fade-up delay-2">
+                    <svg viewBox="0 0 400 300" width="100%" height="100%">
+                        <line x1="150" y1="200" x2="250" y2="100" stroke="#3b82f6" stroke-width="6"/>
+                        <circle cx="150" cy="200" r="10" fill="#161b22" stroke="#10b981" stroke-width="3"/>
+                        <circle cx="250" cy="100" r="10" fill="#161b22" stroke="#10b981" stroke-width="3"/>
+                        <text x="265" y="95" fill="#f59e0b" font-family="Roboto Mono">D (u,v)</text>
+                        <text x="130" y="225" fill="#f59e0b" font-family="Roboto Mono">Code 1, 2</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<h2>Professional Certifications</h2>
-<ul>
-<li>PMP® – Project Management Professional</li>
-<li>PMI-CP™ – Construction Professional</li>
-<li>PMO-CP™</li>
-<li>McKinsey Forward Graduate</li>
-</ul>
-</div>
+        <div class="slide">
+            <h2><span>14.2 & 14.3</span> Member Stiffness and Transformation</h2>
+            <p class="fade-up delay-1">The stiffness matrix relates the loads at the ends of the member, <em>q</em>, to their local displacements, <em>d</em>, where <em>q = k'd</em> <span class="citation">[cite: 125, 1447]</span>.</p>
+            
+            <div class="layout-grid">
+                <div class="math-panel fade-up delay-2">
+                    <div style="color:var(--text-muted); margin-bottom:10px;">Local Member Stiffness [k']:</div>
+                    k' = <span class="math-accent">AE / L</span> 
+                    <div class="math-matrix" style="grid-template-columns: 1fr 1fr;">
+                        <span>1</span> <span>-1</span>
+                        <span>-1</span> <span>1</span>
+                    </div> <span class="citation">[cite: 126]</span>
+                </div>
+                <div class="math-panel fade-up delay-2" style="border-left-color: var(--accent);">
+                    <div style="color:var(--text-muted); margin-bottom:10px;">Displacement Transformation [T]:</div>
+                    d = T D <span class="citation">[cite: 219]</span><br>
+                    T = 
+                    <div class="math-matrix" style="grid-template-columns: repeat(4, 1fr); font-size: 0.9rem;">
+                        <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span> <span>0</span> <span>0</span>
+                        <span>0</span> <span>0</span> <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span>
+                    </div> <span class="citation">[cite: 222]</span>
+                </div>
+            </div>
 
-<div class="card">
-<h2>Areas of Expertise</h2>
-<ul>
-<li>Project Management</li>
-<li>Water Resources Management</li>
-<li>Construction Supervision</li>
-<li>Proposal Development</li>
-<li>Infrastructure Development</li>
-<li>Climate Resilience</li>
-</ul>
-</div>
+            <div class="math-panel fade-up delay-3" style="text-align: center;">
+                <strong>Force Transformation:</strong> Q = T<sup>T</sup> q <span class="citation">[cite: 266]</span> <br>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">The transpose of the displacement matrix maps local forces back to global axes <span class="citation">[cite: 272]</span>.</span>
+            </div>
+        </div>
 
-<div class="card">
-<h2>Contact</h2>
-<p>Email: your-email@example.com</p>
-<p>LinkedIn: Add your LinkedIn URL</p>
-</div>
+        <div class="slide">
+            <h2><span>14.4</span> Member Global Stiffness Matrix</h2>
+            <div class="layout-grid">
+                <div>
+                    <p class="fade-up delay-1">By combining transformations, the global stiffness matrix <em>k</em> is derived: <strong>k = T<sup>T</sup> k' T</strong> <span class="citation">[cite: 291]</span>.</p>
+                    <p class="fade-up delay-2">The location of each element in this symmetric 4x4 matrix is referenced by the global DOF codes (N<sub>x</sub>, N<sub>y</sub>, F<sub>x</sub>, F<sub>y</sub>) <span class="citation">[cite: 311]</span>.</p>
+                </div>
+                <div class="math-panel fade-up delay-3" style="font-size: 0.95rem; padding: 15px;">
+                    <div style="color:var(--text-muted); margin-bottom:10px;">Global Matrix [k]:</div>
+                    <span class="math-accent">AE/L</span> * <div class="math-matrix" style="grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                        <span>λ<sub>x</sub>²</span> <span>λ<sub>x</sub>λ<sub>y</sub></span> <span>-λ<sub>x</sub>²</span> <span>-λ<sub>x</sub>λ<sub>y</sub></span>
+                        <span>λ<sub>x</sub>λ<sub>y</sub></span> <span>λ<sub>y</sub>²</span> <span>-λ<sub>x</sub>λ<sub>y</sub></span> <span>-λ<sub>y</sub>²</span>
+                        <span>-λ<sub>x</sub>²</span> <span>-λ<sub>x</sub>λ<sub>y</sub></span> <span>λ<sub>x</sub>²</span> <span>λ<sub>x</sub>λ<sub>y</sub></span>
+                        <span>-λ<sub>x</sub>λ<sub>y</sub></span> <span>-λ<sub>y</sub>²</span> <span>λ<sub>x</sub>λ<sub>y</sub></span> <span>λ<sub>y</sub>²</span>
+                    </div> <span class="citation">[cite: 300, 301, 302]</span>
+                </div>
+            </div>
+        </div>
 
-</section>
+        <div class="slide">
+            <h2><span>14.6</span> Application & Matrix Partitioning</h2>
+            <div class="layout-grid">
+                <div>
+                    <p class="fade-up delay-1">Once assembled, the structure stiffness equation is <strong>Q = K D</strong> <span class="citation">[cite: 445]</span>.</p>
+                    <p class="fade-up delay-2">By partitioning the matrices into known (k) and unknown (u) components <span class="citation">[cite: 450]</span>, we solve directly for unconstrained displacements.</p>
+                    <div class="math-panel fade-up delay-3">
+                        Q<sub>k</sub> = K<sub>11</sub> D<sub>u</sub> + K<sub>12</sub> D<sub>k</sub> <span class="citation">[cite: 455]</span> <br><br>
+                        Assuming D<sub>k</sub> = 0 <span class="citation">[cite: 459]</span>: <br>
+                        <span class="math-accent">D<sub>u</sub> = K<sub>11</sub><sup>-1</sup> Q<sub>k</sub></span> <span class="citation">[cite: 462]</span>
+                    </div>
+                </div>
+                <div class="graphic-container fade-up delay-2">
+                    <svg viewBox="0 0 300 300" width="100%" height="100%">
+                        <rect x="30" y="30" width="240" height="240" fill="none" stroke="#3b82f6" stroke-width="3" rx="8"/>
+                        <line x1="30" y1="160" x2="270" y2="160" stroke="#30363d" stroke-width="3" stroke-dasharray="8,4"/>
+                        <line x1="160" y1="30" x2="160" y2="270" stroke="#30363d" stroke-width="3" stroke-dasharray="8,4"/>
+                        <text x="80" y="105" fill="#34d399" font-family="Roboto Mono" font-size="28" font-weight="bold">K₁₁</text>
+                        <text x="195" y="105" fill="#94a3b8" font-family="Roboto Mono" font-size="24">K₁₂</text>
+                        <text x="80" y="225" fill="#94a3b8" font-family="Roboto Mono" font-size="24">K₂₁</text>
+                        <text x="195" y="225" fill="#3b82f6" font-family="Roboto Mono" font-size="24">K₂₂</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
 
-<footer>
-© 2026 Mahdi Yussuf Abdi
-</footer>
+        <div class="slide">
+            <h2><span>14.7</span> Nodal Coordinates for Inclined Supports</h2>
+            <div class="layout-grid">
+                <div>
+                    <p class="fade-up delay-1">When a truss is supported by a roller on an incline, constraint cannot be defined using a single horizontal/vertical global system <span class="citation">[cite: 883]</span>.</p>
+                    <p class="fade-up delay-2">We use nodal coordinates (x'', y'') located at the inclined support <span class="citation">[cite: 886]</span>.</p>
+                    <p class="fade-up delay-3">The stiffness matrix expands to incorporate direction cosines mapping local (x'), global (x, y), and nodal (x'', y'') axes <span class="citation">[cite: 930, 931]</span>.</p>
+                </div>
+                <div class="graphic-container fade-up delay-2">
+                    <svg viewBox="0 0 300 200" width="100%" height="100%">
+                        <line x1="50" y1="150" x2="200" y2="50" stroke="#3b82f6" stroke-width="6"/>
+                        <g stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4">
+                            <line x1="200" y1="50" x2="260" y2="50"/>
+                            <line x1="200" y1="50" x2="200" y2="-10"/>
+                        </g>
+                        <g stroke="#10b981" stroke-width="2">
+                            <line x1="200" y1="50" x2="250" y2="10"/>
+                            <line x1="200" y1="50" x2="160" y2="-5"/>
+                        </g>
+                        <circle cx="200" cy="50" r="8" fill="#161b22" stroke="#f59e0b" stroke-width="3"/>
+                        <text x="240" y="20" fill="#10b981" font-family="Roboto Mono" font-size="12">x''</text>
+                        <text x="150" y="-10" fill="#10b981" font-family="Roboto Mono" font-size="12">y''</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
 
+        <div class="slide">
+            <h2><span>14.8</span> Thermal Changes & Fabrication Errors</h2>
+            <p class="fade-up delay-1">Modifications required when members change length due to thermal expansion or fabrication errors. This is crucial for indeterminate trusses <span class="citation">[cite: 1107, 1111]</span>.</p>
+            <div class="layout-grid">
+                <div class="math-panel fade-up delay-2">
+                    <strong>Thermal Fixed-End Forces:</strong><br>
+                    (q<sub>N</sub>)<sub>0</sub> = AEαΔT <span class="citation">[cite: 1116]</span><br>
+                    (q<sub>F</sub>)<sub>0</sub> = -AEαΔT <span class="citation">[cite: 1116]</span>
+                </div>
+                <div class="math-panel fade-up delay-2" style="border-left-color: var(--secondary);">
+                    <strong>Fabrication Fixed-End Forces:</strong><br>
+                    (q<sub>N</sub>)<sub>0</sub> = AEΔL / L <span class="citation">[cite: 1122]</span><br>
+                    (q<sub>F</sub>)<sub>0</sub> = -AEΔL / L <span class="citation">[cite: 1122]</span>
+                </div>
+            </div>
+            <div class="math-panel fade-up delay-3" style="text-align: center;">
+                <strong>Modified Stiffness Equation:</strong><br>
+                Q = K D + Q<sub>0</sub> <span class="citation">[cite: 1130]</span><br>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">Where Q<sub>0</sub> is the column matrix of initial fixed-end forces <span class="citation">[cite: 1132]</span>.</span>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2><span>14.9</span> Space-Truss Analysis</h2>
+            <p class="fade-up delay-1">Three-dimensional analysis requires extending the transformation matrix to include the z-axis <span class="citation">[cite: 1292]</span>.</p>
+            
+            <div class="layout-grid">
+                <div class="math-panel fade-up delay-2">
+                    λ<sub>z</sub> = (z<sub>F</sub> - z<sub>N</sub>) / L <span class="citation">[cite: 1320]</span>
+                </div>
+                <div class="math-panel fade-up delay-2">
+                    T = 
+                    <div class="math-matrix" style="grid-template-columns: repeat(6, 1fr); font-size: 0.8rem;">
+                        <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span> <span>λ<sub>z</sub></span> <span>0</span> <span>0</span> <span>0</span>
+                        <span>0</span> <span>0</span> <span>0</span> <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span> <span>λ<sub>z</sub></span>
+                    </div> <span class="citation">[cite: 1324]</span>
+                </div>
+            </div>
+            <p class="fade-up delay-3" style="text-align: center; margin-top: 20px;">The resulting space-truss member stiffness matrix is a symmetric 6x6 matrix <span class="citation">[cite: 1331]</span> referencing N<sub>x</sub>, N<sub>y</sub>, N<sub>z</sub>, F<sub>x</sub>, F<sub>y</sub>, F<sub>z</sub> <span class="citation">[cite: 1334]</span>.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Course Assessment Protocol</h2>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                
+                <div class="exam-callout fade-up delay-1" style="width: 85%;">
+                    <i class="fas fa-clipboard-list" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
+                    <h3 style="font-size: 1.8rem; color: var(--white); margin-bottom: 15px;">Critical Assessment Rule</h3>
+                    <p style="font-size: 1.3rem; font-weight: 500; color: #cbd5e1; margin: 0;">
+                        As a strict reminder for grading and exam preparation: <br>
+                        <strong style="color: var(--accent); font-size: 1.5rem;">Students are only required to answer THREE questions for Part B of their assessment.</strong>
+                    </p>
+                </div>
+
+                <div class="fade-up delay-2" style="text-align: center; max-width: 900px; margin-top: 40px;">
+                    <p>The manual derivation of <strong>[K₁₁]</strong> partitioning forms the core of engineering software operations. Practice assembling the global matrices systematically to ensure success!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-counter" id="slideCounter">1 / 9</div>
+        <div class="controls">
+            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateUI() {
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            progressBar.style.width = progress + '%';
+            
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            slides[currentSlide].classList.remove('active');
+            
+            const oldSlide = slides[currentSlide];
+            const newSlide = oldSlide.cloneNode(true);
+            oldSlide.parentNode.replaceChild(newSlide, oldSlide);
+
+            currentSlide += direction;
+
+            const updatedSlides = document.querySelectorAll('.slide');
+            updatedSlides[currentSlide].classList.add('active');
+
+            updateUI();
+        }
+
+        updateUI();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) changeSlide(1);
+            if (e.key === 'ArrowLeft' && currentSlide > 0) changeSlide(-1);
+        });
+    </script>
 </body>
 </html>
