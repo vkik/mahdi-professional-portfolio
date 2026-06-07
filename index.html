@@ -1,483 +1,830 @@
+<!-- STREAMING_CHUNK:Initializing document and head... -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 14: Truss Analysis Using the Stiffness Method</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;800&family=Roboto+Mono:wght@400;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahdi Yussuf Abdi — Civil Engineer | Lecturer | Infrastructure Risk & Resilience Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  /* STREAMING_CHUNK:Defining CSS variables and base reset... */
+  :root {
+    --navy:        #12334f;
+    --navy-deep:   #071827;
+    --navy-soft:   #1c5d7e;
+    --somalia:     #4189dd;
+    --somalia-deep:#1f6fbd;
+    --water:       #10b8d7;
+    --water-soft:  #7ee3f4;
+    --green:       #24966f;
+    --green-soft:  #64c79d;
+    --pmi:         #6750a4;
+    --pmi-soft:    #9b7de3;
+    --steel:       #607487;
+    --earth:       #c59b45;
+    --cream:       #eef8fb;
+    --paper:       #ffffff;
+    --ink:         #1d2f3f;
+    --ink-soft:    #526675;
+    --line:        #d9e7ed;
+    --shadow:      0 24px 70px -24px rgba(7, 24, 39, 0.42);
+    --shadow-hover:0 30px 80px -20px rgba(7, 24, 39, 0.5);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
-        :root {
-            --bg-color: #0d1117;
-            --panel-bg: #161b22;
-            --primary: #3b82f6;
-            --secondary: #10b981;
-            --accent: #f59e0b;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --white: #ffffff;
-            --border: #30363d;
-        }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 10% 8%, rgba(65,137,221,0.18), transparent 36%),
+      radial-gradient(circle at 92% 92%, rgba(16,184,215,0.16), transparent 42%),
+      radial-gradient(circle at 50% 100%, rgba(36,150,111,0.12), transparent 45%),
+      var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px 20px;
+  }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  /* STREAMING_CHUNK:Styling layout containers and header... */
+  .resume {
+    max-width: 980px; margin: 0 auto; background: var(--paper);
+    border-radius: 18px; overflow: hidden; box-shadow: var(--shadow);
+    animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    position: relative;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #010409;
-            color: var(--text-main);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  /* Floating Action Menu */
+  .action-menu {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+  }
+  .action-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .action-btn:hover {
+    background: var(--water);
+    border-color: var(--water-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 184, 215, 0.3);
+  }
+  .action-btn .tooltip {
+    position: absolute;
+    top: 45px;
+    background: var(--navy-deep);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .action-btn:hover .tooltip { opacity: 1; visibility: visible; top: 48px; }
 
-        .deck-container {
-            width: 95vw;
-            max-width: 1400px;
-            height: 85vh;
-            max-height: 850px;
-            background: var(--bg-color);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+  header {
+    position: relative;
+    background:
+      linear-gradient(135deg, rgba(7,24,39,0.98) 0%, rgba(18,51,79,0.96) 34%, rgba(31,111,189,0.90) 68%, rgba(16,184,215,0.72) 100%),
+      linear-gradient(90deg, var(--navy-deep), var(--somalia));
+    color: #fff; padding: 46px 48px 42px; overflow: hidden;
+  }
+  header::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(circle at 80% 20%, #000 10%, transparent 70%);
+  }
+  header::after {
+    content: ""; position: absolute; right: -90px; top: -90px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(126,227,244,0.48), transparent 65%);
+    border-radius: 50%;
+  }
 
-        .grid-bg {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.5;
-        }
+  /* STREAMING_CHUNK:Styling header elements and graphics... */
+  .header-graphics { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .blueprint-lines { position: absolute; right: 18px; top: 18px; width: min(46%, 420px); height: 210px; opacity: 0.46; }
+  .blueprint-lines path, .blueprint-lines polyline, .blueprint-lines line {
+    fill: none; stroke: rgba(210, 232, 225, 0.58); stroke-width: 1.5; stroke-dasharray: 7 9; animation: blueprint-dash 16s linear infinite;
+  }
+  .blueprint-lines circle { fill: rgba(79, 156, 127, 0.18); stroke: rgba(79, 156, 127, 0.78); stroke-width: 1.4; }
+  .scan-line {
+    position: absolute; left: -20%; top: 0; width: 22%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+    transform: skewX(-18deg); animation: scan-pass 8s ease-in-out infinite;
+  }
+  .somalia-star {
+    position: absolute; right: 48px; bottom: 34px; color: rgba(255,255,255,0.18);
+    font-size: 118px; line-height: 1; transform: rotate(7deg); text-shadow: 0 0 34px rgba(126,227,244,0.30);
+    animation: star-float 7s ease-in-out infinite;
+  }
 
-        .slide {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            padding: 50px 80px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-            transform: scale(0.95) translateY(20px);
-            display: flex;
-            flex-direction: column;
-            z-index: 1;
-            overflow-y: auto;
-        }
+  .header-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 32px; }
+  
+  /* UPDATED IMAGE STYLING */
+  .portrait-shell { position: relative; flex: 0 0 148px; width: 148px; height: 148px; border-radius: 28px; isolation: isolate; animation: portrait-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.08s both; }
+  .portrait-shell::before { content: ""; position: absolute; inset: -8px; border-radius: 34px; background: conic-gradient(from 120deg, var(--water-soft), rgba(255,255,255,0.45), var(--somalia), var(--pmi-soft), var(--green-soft), var(--water-soft)); animation: ring-turn 9s linear infinite; z-index: -2; }
+  .portrait-shell::after { content: ""; position: absolute; inset: -2px; border-radius: 30px; background: rgba(7, 24, 39, 0.86); z-index: -1; }
+  .portrait-frame { position: relative; width: 100%; height: 100%; border-radius: 26px; overflow: hidden; border: 1px solid rgba(255,255,255,0.22); box-shadow: 0 24px 50px -22px rgba(0,0,0,0.62); background: var(--navy-soft); display: flex; align-items: center; justify-content: center; }
+  
+  .portrait-placeholder { font-size: 4rem; color: rgba(255,255,255,0.8); position: absolute; z-index: 0; }
+  
+  /* Adjusted for the new image composition */
+  .portrait-frame img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: 50% 20%; /* Moved up slightly to focus on the face */
+    transform: scale(1.3); /* Scaled up to crop out the lower body/desk */
+    filter: saturate(1.04) contrast(1.02); 
+    position: relative; 
+    z-index: 1; 
+  }
+  .portrait-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(145deg, rgba(255,255,255,0.26), transparent 42%, rgba(16,184,215,0.24)); mix-blend-mode: screen; z-index: 2; }
+  .portrait-tag { position: absolute; right: -14px; bottom: 13px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 999px; background: rgba(246,244,239,0.96); color: var(--navy); font-size: 0.69rem; font-weight: 800; letter-spacing: 0.06em; box-shadow: 0 12px 24px -14px rgba(0,0,0,0.7); z-index: 3; }
+  .portrait-tag i { color: var(--green); }
 
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1) translateY(0);
-            z-index: 10;
-        }
+  /* STREAMING_CHUNK:Styling typography and metadata... */
+  .head-text { flex: 1; min-width: 0; }
+  .name { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+  .name span { color: var(--water-soft); text-shadow: 0 0 24px rgba(126,227,244,0.28); }
+  .role-line { font-size: 0.95rem; font-weight: 500; color: #d7edf7; margin-top: 6px; }
+  .accent-bar { width: 64px; height: 4px; background: linear-gradient(90deg, var(--water-soft), var(--green-soft), var(--earth)); border-radius: 4px; margin: 14px 0 16px; position: relative; overflow: hidden; }
+  .accent-bar::after { content: ""; position: absolute; inset: 0; width: 38%; background: rgba(255,255,255,0.72); filter: blur(2px); animation: accent-sweep 2.8s ease-in-out infinite; }
+  
+  .titles { display: flex; flex-wrap: wrap; gap: 8px 10px; max-width: 760px; }
+  .titles span { font-size: 0.8rem; font-weight: 500; color: #e5f5fb; background: rgba(255,255,255,0.10); border: 1px solid rgba(126,227,244,0.24); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); padding: 6px 13px; border-radius: 40px; backdrop-filter: blur(4px); transition: transform 0.2s, background 0.2s; cursor: default; }
+  .titles span:hover { transform: translateY(-2px); background: rgba(255,255,255,0.15); }
 
-        h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #60a5fa, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-        }
+  .contact-bar { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.85rem; }
+  .contact-bar a, .contact-bar span { color: #e5f5fb; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: color 0.18s ease; }
+  .contact-bar a:hover { color: var(--green-soft); }
+  .contact-bar i { color: var(--water-soft); width: 16px; text-align: center; }
 
-        h2 {
-            font-size: 2rem;
-            color: var(--white);
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 15px;
-        }
+  /* STREAMING_CHUNK:Styling statistics banner... */
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); background: linear-gradient(180deg, #f8fdff, #eaf6f9); border-bottom: 1px solid var(--line); }
+  .stat { text-align: center; padding: 22px 12px; border-right: 1px solid var(--line); position: relative; overflow: hidden; }
+  .stat:last-child { border-right: none; }
+  .stat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.55), transparent 80%); transform: translateX(-120%); animation: stat-sheen 6s ease-in-out infinite; }
+  .stat .num { font-size: 1.6rem; font-weight: 800; color: var(--navy); line-height: 1; letter-spacing: -0.02em; }
+  .stat .num span { color: var(--green); }
+  .stat .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); margin-top: 7px; }
+  .stat i { color: var(--green); font-size: 0.95rem; margin-bottom: 8px; display: block; }
+  .stat:nth-child(3) .num, .stat:nth-child(3) i { color: var(--pmi); }
+  .stat:nth-child(4) .num, .stat:nth-child(4) i { color: var(--water); }
+  .stat:nth-child(5) .num, .stat:nth-child(5) i { color: var(--somalia-deep); }
 
-        h2 span {
-            color: var(--primary);
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.3rem;
-            background: rgba(59, 130, 246, 0.1);
-            padding: 5px 12px;
-            border-radius: 8px;
-        }
+  /* STREAMING_CHUNK:Styling main body and sidebar layout... */
+  .body { display: grid; grid-template-columns: 1.65fr 1fr; }
+  main { padding: 42px 40px 46px; }
+  .sidebar { padding: 42px 36px 46px; background: linear-gradient(180deg, #eef8fb, #f6fbfd); border-left: 1px solid var(--line); }
+  
+  .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+  
+  section { margin-bottom: 34px; }
+  section:last-child { margin-bottom: 0; }
 
-        p, li {
-            font-size: 1.15rem;
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
+  .sec-title { display: flex; align-items: center; gap: 11px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--navy); margin-bottom: 18px; }
+  .sec-title i { color: var(--green); font-size: 0.95rem; width: 22px; height: 22px; display: grid; place-items: center; background: linear-gradient(135deg, rgba(16,184,215,0.14), rgba(36,150,111,0.14)); border-radius: 7px; transition: transform 0.3s; }
+  section:hover .sec-title i { transform: scale(1.15) rotate(5deg); }
+  .sidebar .sec-title { color: var(--navy-deep); }
 
-        strong { color: var(--white); }
+  /* STREAMING_CHUNK:Styling content components (chips, timelines)... */
+  .summary { font-size: 0.94rem; color: var(--ink-soft); }
+  .summary strong { color: var(--navy); font-weight: 600; }
+  .summary em { color: var(--green); font-style: italic; font-weight: 500; }
 
-        ul { padding-left: 25px; list-style-type: none; }
-        ul li::before {
-            content: "▹";
-            color: var(--primary);
-            font-weight: bold;
-            display: inline-block; 
-            width: 1em;
-            margin-left: -1em;
-        }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 0.8rem; font-weight: 500; color: var(--navy); background: linear-gradient(135deg, rgba(16,184,215,0.10), rgba(36,150,111,0.10)); border: 1px solid rgba(16,184,215,0.24); padding: 7px 13px; border-radius: 40px; display: inline-flex; align-items: center; gap: 7px; transition: all 0.2s ease; cursor: default; }
+  .chip i { color: var(--green); font-size: 0.78rem; }
+  .chip:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(16, 184, 215, 0.15); border-color: var(--water); }
+  
+  .timeline { list-style: none; }
+  .tl-item { position: relative; padding: 0 0 24px 30px; border-left: 2px solid var(--line); transition: all 0.3s ease; }
+  .tl-item:last-child { padding-bottom: 4px; border-left-color: transparent; }
+  .tl-item::before { content: ""; position: absolute; left: -7px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(47,125,98,0.15); transition: all 0.3s ease; animation: pulse-dot 2.8s ease-in-out infinite; }
+  .tl-item:hover::before { background: var(--water); box-shadow: 0 0 0 6px rgba(16,184,215,0.2); }
+  .tl-item h3 { font-size: 0.96rem; font-weight: 700; color: var(--navy); }
+  .tl-item .org { font-size: 0.85rem; font-weight: 600; color: var(--green); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin: 2px 0 6px; }
+  .tl-item .org .yr { color: var(--earth); font-weight: 600; background: rgba(197, 155, 69, 0.1); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; }
+  .tl-item ul { margin: 4px 0 0; padding-left: 18px; }
+  .tl-item li { font-size: 0.87rem; color: var(--ink-soft); margin-bottom: 4px; }
+  .tl-item li strong { color: var(--navy); font-weight: 600; }
 
-        .citation {
-            font-size: 0.85em;
-            color: var(--primary);
-            vertical-align: super;
-            margin-left: 2px;
-            opacity: 0.8;
-            font-family: 'Roboto Mono', monospace;
-        }
+  /* STREAMING_CHUNK:Styling Projects and Publications sections... */
+  .project-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .project-card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 16px; border-left: 4px solid var(--water); transition: all 0.25s ease; position: relative; overflow: hidden; }
+  .project-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -10px rgba(16,184,215,0.2); border-color: var(--water-soft); }
+  .project-card::after { content: "\f279"; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; right: -10px; bottom: -15px; font-size: 4rem; color: rgba(16, 184, 215, 0.05); transform: rotate(-15deg); z-index: 0; }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; position: relative; z-index: 1; }
+  .project-title { font-size: 0.9rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+  .project-role { font-size: 0.75rem; font-weight: 600; color: var(--green); background: rgba(36, 150, 111, 0.1); padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .project-desc { font-size: 0.82rem; color: var(--ink-soft); position: relative; z-index: 1; }
+  .project-metrics { display: flex; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 0.75rem; font-weight: 600; color: var(--navy-soft); position: relative; z-index: 1; }
+  .project-metrics span { display: flex; align-items: center; gap: 5px; }
+  .project-metrics i { color: var(--earth); }
 
-        .layout-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            flex-grow: 1;
-            align-items: center;
-        }
+  .pub-item { padding: 12px 14px; background: rgba(255,255,255,0.6); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; transition: all 0.2s; }
+  .pub-item:hover { background: var(--paper); border-color: var(--pmi-soft); box-shadow: 0 4px 12px rgba(103, 80, 164, 0.08); }
+  .pub-title { font-size: 0.88rem; font-weight: 600; color: var(--navy); display: flex; align-items: flex-start; gap: 8px; }
+  .pub-title i { color: var(--pmi); font-size: 1rem; margin-top: 2px; }
+  .pub-meta { font-size: 0.78rem; color: var(--ink-soft); margin-left: 24px; margin-top: 4px; }
+  .pub-meta span { color: var(--earth); font-weight: 600; }
 
-        .math-panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 12px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.1rem;
-            color: #a5b4fc;
-            margin: 15px 0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            transition: transform 0.3s;
-            overflow-x: auto;
-        }
+  /* STREAMING_CHUNK:Styling side elements (education, certs, skills)... */
+  .edu-item { padding: 13px 0; border-bottom: 1px dashed var(--line); }
+  .edu-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .edu-item h3 { font-size: 0.92rem; font-weight: 600; color: var(--navy); }
+  .edu-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 3px; font-size: 0.82rem; color: var(--ink-soft); }
+  .edu-meta .year { font-weight: 600; color: var(--green); }
+  .edu-item .diss { font-size: 0.82rem; color: var(--ink-soft); font-style: italic; margin-top: 5px; background: rgba(238, 248, 251, 0.6); padding: 8px; border-left: 2px solid var(--water); border-radius: 0 4px 4px 0; }
 
-        .math-panel:hover { transform: translateX(5px); border-left-color: var(--secondary); }
-        .math-accent { color: var(--accent); }
-        .math-matrix { display: inline-grid; vertical-align: middle; padding: 0 10px; border-left: 2px solid #a5b4fc; border-right: 2px solid #a5b4fc; border-radius: 4px; text-align: center; gap: 8px;}
+  .certs { display: grid; gap: 10px; }
+  .cert { display: flex; align-items: center; gap: 12px; background: var(--paper); border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: 10px; padding: 11px 14px; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+  .cert:hover { transform: translateX(4px); box-shadow: 0 8px 22px -12px rgba(15,42,67,0.4); border-color: var(--green-soft); }
+  .cert i { color: var(--navy); font-size: 1.05rem; }
+  .cert span { font-size: 0.84rem; font-weight: 600; color: var(--navy); }
+  .cert small { display: block; font-size: 0.72rem; font-weight: 500; color: var(--ink-soft); }
 
-        .graphic-container {
-            width: 100%;
-            height: 100%;
-            min-height: 300px;
-            background: var(--panel-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
+  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .skill-cat { grid-column: 1 / -1; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); margin-top: 6px; }
+  .skill-cat:first-child { margin-top: 0; }
+  .skill { display: flex; align-items: center; gap: 9px; background: var(--paper); border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px; font-size: 0.8rem; font-weight: 500; color: var(--navy); transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.2s ease; cursor: default; }
+  .skill:hover { border-color: var(--green-soft); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(36, 150, 111, 0.1); }
+  .skill i { color: var(--green); font-size: 0.9rem; }
 
-        .exam-callout {
-            background: rgba(245, 158, 11, 0.05); border: 2px dashed var(--accent);
-            padding: 25px; border-radius: 12px; text-align: center;
-            margin-top: 20px; margin-bottom: 20px;
-        }
+  /* STREAMING_CHUNK:Styling badges and progress bars... */
+  .lang { margin-bottom: 16px; }
+  .lang:last-child { margin-bottom: 0; }
+  .lang-head { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+  .lang-head b { color: var(--navy); font-weight: 600; }
+  .lang-head span { color: var(--ink-soft); font-size: 0.78rem; }
+  .bar { height: 7px; background: #d7e8ee; border-radius: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 6px; width: 0; background: linear-gradient(90deg, var(--somalia), var(--water), var(--green-soft)); transition: width 1.4s cubic-bezier(0.2,0.8,0.2,1); }
+  .reveal.active .bar i { width: var(--w); }
 
-        .controls {
-            position: absolute; bottom: 30px; right: 40px; display: flex; gap: 15px; z-index: 100;
-        }
-        .btn-nav {
-            background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border);
-            width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center;
-            cursor: pointer; transition: all 0.3s; font-size: 1.2rem;
-        }
-        .btn-nav:hover:not(:disabled) { background: var(--primary); color: var(--white); border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
-        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
-        
-        .progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: var(--panel-bg); z-index: 100; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.4s ease; }
-        .slide-counter { position: absolute; bottom: 45px; left: 40px; font-family: 'Roboto Mono'; color: var(--text-muted); font-size: 1.1rem; }
+  .badges-intro { font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; background: var(--cream); padding: 10px 14px; border-radius: 8px; border-left: 3px solid var(--somalia); }
+  .badges-intro i { color: var(--somalia); font-size: 1.1rem; }
+  
+  .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .badge { display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; padding: 16px 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; position: relative; }
+  .badge:hover { transform: translateY(-4px); box-shadow: 0 14px 30px -16px rgba(15,42,67,0.45); border-color: var(--green-soft); }
+  .badge img { width: 84px; height: 84px; object-fit: contain; margin-bottom: 10px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .badge:hover img { transform: scale(1.1) rotate(-3deg); }
+  .badge .b-name { font-size: 0.78rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+  .badge .b-iss { font-size: 0.68rem; font-weight: 500; color: var(--ink-soft); margin-top: 3px; }
+  .badge .b-verify { font-size: 0.66rem; font-weight: 600; color: var(--green); margin-top: 7px; display: inline-flex; align-items: center; gap: 4px; background: rgba(36, 150, 111, 0.1); padding: 3px 8px; border-radius: 12px; transition: background 0.2s; }
+  .badge:hover .b-verify { background: rgba(36, 150, 111, 0.2); }
 
-        /* Animation Classes */
-        .fade-up { opacity: 0; transform: translateY(20px); }
-        .slide.active .fade-up { animation: fadeUpAnim 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; }
-        @keyframes fadeUpAnim { to { opacity: 1; transform: translateY(0); } }
-    </style>
+  /* Notification Toast */
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--navy-deep); color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast i { color: var(--green-soft); }
+
+  footer { background: linear-gradient(90deg, var(--navy-deep), var(--somalia-deep)); color: #9fb3c2; text-align: center; font-size: 0.76rem; letter-spacing: 0.04em; padding: 20px; position: relative; overflow: hidden; }
+  footer i { color: var(--green-soft); margin-right: 6px; }
+  footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(126,227,244,0.3), transparent); }
+
+  /* STREAMING_CHUNK:Adding Animations and Media Queries... */
+  @keyframes blueprint-dash { to { stroke-dashoffset: -160; } }
+  @keyframes scan-pass { 0%, 35% { transform: translateX(-160%) skewX(-18deg); } 70%, 100% { transform: translateX(640%) skewX(-18deg); } }
+  @keyframes portrait-rise { from { opacity: 0; transform: translateY(18px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes ring-turn { to { transform: rotate(360deg); } }
+  @keyframes accent-sweep { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(280%); } }
+  @keyframes stat-sheen { 0%, 45% { transform: translateX(-125%); } 72%, 100% { transform: translateX(125%); } }
+  @keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 4px rgba(47,125,98,0.15); } 50% { box-shadow: 0 0 0 9px rgba(47,125,98,0.07); } }
+
+  @media (max-width: 820px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat { border-bottom: 1px solid var(--line); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:last-child { grid-column: 1 / -1; border-bottom: none; }
+  }
+  @media (max-width: 760px) {
+    body { padding: 16px 10px; }
+    header { padding: 36px 24px 30px; }
+    .header-inner { flex-direction: column; text-align: center; gap: 22px; }
+    .titles, .contact-bar, .chips { justify-content: center; }
+    .portrait-tag { right: 50%; transform: translateX(50%); bottom: -13px; }
+    .accent-bar { margin-left: auto; margin-right: auto; }
+    .body { grid-template-columns: 1fr; }
+    .sidebar { border-left: none; border-top: 1px solid var(--line); }
+    main, .sidebar { padding: 32px 24px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .badge-grid { grid-template-columns: repeat(2, 1fr); }
+    .action-menu { top: 12px; right: 12px; }
+  }
+  @media (max-width: 480px) {
+    .badge-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.001ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; font-size: 11pt; }
+    .resume { box-shadow: none; border-radius: 0; max-width: 100%; animation: none; }
+    header { background: var(--navy) !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 30px; }
+    .header-graphics, .action-menu, .portrait-shell::before, .portrait-frame::after { display: none; }
+    .contact-bar a { color: white !important; }
+    .body { grid-template-columns: 1.8fr 1fr; gap: 20px; }
+    main, .sidebar { padding: 20px; border: none; background: white; }
+    .sidebar { border-left: 1px solid #ccc; }
+    .stat, .cert, .skill, .badge, .project-card { border: 1px solid #ddd; box-shadow: none; break-inside: avoid; }
+    .chip { border: 1px solid #ccc; background: transparent; }
+    .badge-grid { grid-template-columns: repeat(3, 1fr); }
+    .bar i { animation: none; width: var(--w); background: var(--navy); }
+    .reveal { opacity: 1; transform: none; }
+    footer { display: none; }
+    a { text-decoration: none; }
+  }
+</style>
 </head>
 <body>
-
-    <div class="deck-container">
-        <div class="grid-bg"></div>
-
-        <div class="slide active">
-            <div style="text-align: center; margin: auto;">
-                <h2 style="justify-content: center; border:none; margin-bottom: 10px;"><span>Chapter 14</span></h2>
-                <h1>Truss Analysis Using the Stiffness Method</h1>
-                <p class="fade-up delay-1" style="font-size: 1.5rem; max-width: 800px; margin: 0 auto;">
-                    A comprehensive expansion into matrix displacement methodologies, thermal effects, and space trusses <span class="citation">[cite: 1, 1106, 1290]</span>.
-                </p>
-                <div class="graphic-container fade-up delay-2" style="background: transparent; border: none; height: 250px; margin-top: 40px;">
-                    <svg viewBox="0 0 600 200" width="600" height="200">
-                        <line x1="100" y1="150" x2="300" y2="50" stroke="#3b82f6" stroke-width="4" />
-                        <line x1="300" y1="50" x2="500" y2="150" stroke="#3b82f6" stroke-width="4" />
-                        <line x1="100" y1="150" x2="500" y2="150" stroke="#3b82f6" stroke-width="4" />
-                        <line x1="100" y1="150" x2="300" y2="150" stroke="#3b82f6" stroke-width="4" />
-                        <circle cx="100" cy="150" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
-                        <circle cx="300" cy="50" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
-                        <circle cx="500" cy="150" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
-                        <circle cx="300" cy="150" fill="#161b22" stroke="#10b981" stroke-width="3" r="8" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.1</span> Fundamentals of the Stiffness Method</h2>
-            <div class="layout-grid">
-                <div>
-                    <p class="fade-up delay-1">The stiffness method is a displacement method <span class="citation">[cite: 9]</span>. It can be used to analyze both statically determinate and statically indeterminate structures, giving it a universal advantage over the flexibility method <span class="citation">[cite: 12]</span>.</p>
-                    <ul class="fade-up delay-2">
-                        <li><strong>Kinematic Indeterminacy:</strong> Unconstrained displacements represent the primary unknowns <span class="citation">[cite: 42]</span>.</li>
-                        <li><strong>Degrees of Freedom (DOF):</strong> Generally, there are two degrees of freedom for each joint <span class="citation">[cite: 43]</span>.</li>
-                    </ul>
-                    <div class="math-panel fade-up delay-3">
-                        <strong>Code Numbering Rule:</strong><br>
-                        Lowest numbers = Unknown displacements (unconstrained DOFs) <span class="citation">[cite: 48]</span>.<br>
-                        Highest numbers = Known displacements (constrained DOFs) <span class="citation">[cite: 48]</span>.
-                    </div>
-                </div>
-                <div class="graphic-container fade-up delay-2">
-                    <svg viewBox="0 0 400 300" width="100%" height="100%">
-                        <line x1="150" y1="200" x2="250" y2="100" stroke="#3b82f6" stroke-width="6"/>
-                        <circle cx="150" cy="200" r="10" fill="#161b22" stroke="#10b981" stroke-width="3"/>
-                        <circle cx="250" cy="100" r="10" fill="#161b22" stroke="#10b981" stroke-width="3"/>
-                        <text x="265" y="95" fill="#f59e0b" font-family="Roboto Mono">D (u,v)</text>
-                        <text x="130" y="225" fill="#f59e0b" font-family="Roboto Mono">Code 1, 2</text>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.2 & 14.3</span> Member Stiffness and Transformation</h2>
-            <p class="fade-up delay-1">The stiffness matrix relates the loads at the ends of the member, <em>q</em>, to their local displacements, <em>d</em>, where <em>q = k'd</em> <span class="citation">[cite: 125, 1447]</span>.</p>
-            
-            <div class="layout-grid">
-                <div class="math-panel fade-up delay-2">
-                    <div style="color:var(--text-muted); margin-bottom:10px;">Local Member Stiffness [k']:</div>
-                    k' = <span class="math-accent">AE / L</span> 
-                    <div class="math-matrix" style="grid-template-columns: 1fr 1fr;">
-                        <span>1</span> <span>-1</span>
-                        <span>-1</span> <span>1</span>
-                    </div> <span class="citation">[cite: 126]</span>
-                </div>
-                <div class="math-panel fade-up delay-2" style="border-left-color: var(--accent);">
-                    <div style="color:var(--text-muted); margin-bottom:10px;">Displacement Transformation [T]:</div>
-                    d = T D <span class="citation">[cite: 219]</span><br>
-                    T = 
-                    <div class="math-matrix" style="grid-template-columns: repeat(4, 1fr); font-size: 0.9rem;">
-                        <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span> <span>0</span> <span>0</span>
-                        <span>0</span> <span>0</span> <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span>
-                    </div> <span class="citation">[cite: 222]</span>
-                </div>
-            </div>
-
-            <div class="math-panel fade-up delay-3" style="text-align: center;">
-                <strong>Force Transformation:</strong> Q = T<sup>T</sup> q <span class="citation">[cite: 266]</span> <br>
-                <span style="font-size: 0.9rem; color: var(--text-muted);">The transpose of the displacement matrix maps local forces back to global axes <span class="citation">[cite: 272]</span>.</span>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.4</span> Member Global Stiffness Matrix</h2>
-            <div class="layout-grid">
-                <div>
-                    <p class="fade-up delay-1">By combining transformations, the global stiffness matrix <em>k</em> is derived: <strong>k = T<sup>T</sup> k' T</strong> <span class="citation">[cite: 291]</span>.</p>
-                    <p class="fade-up delay-2">The location of each element in this symmetric 4x4 matrix is referenced by the global DOF codes (N<sub>x</sub>, N<sub>y</sub>, F<sub>x</sub>, F<sub>y</sub>) <span class="citation">[cite: 311]</span>.</p>
-                </div>
-                <div class="math-panel fade-up delay-3" style="font-size: 0.95rem; padding: 15px;">
-                    <div style="color:var(--text-muted); margin-bottom:10px;">Global Matrix [k]:</div>
-                    <span class="math-accent">AE/L</span> * <div class="math-matrix" style="grid-template-columns: repeat(4, 1fr); gap: 8px;">
-                        <span>λ<sub>x</sub>²</span> <span>λ<sub>x</sub>λ<sub>y</sub></span> <span>-λ<sub>x</sub>²</span> <span>-λ<sub>x</sub>λ<sub>y</sub></span>
-                        <span>λ<sub>x</sub>λ<sub>y</sub></span> <span>λ<sub>y</sub>²</span> <span>-λ<sub>x</sub>λ<sub>y</sub></span> <span>-λ<sub>y</sub>²</span>
-                        <span>-λ<sub>x</sub>²</span> <span>-λ<sub>x</sub>λ<sub>y</sub></span> <span>λ<sub>x</sub>²</span> <span>λ<sub>x</sub>λ<sub>y</sub></span>
-                        <span>-λ<sub>x</sub>λ<sub>y</sub></span> <span>-λ<sub>y</sub>²</span> <span>λ<sub>x</sub>λ<sub>y</sub></span> <span>λ<sub>y</sub>²</span>
-                    </div> <span class="citation">[cite: 300, 301, 302]</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.6</span> Application & Matrix Partitioning</h2>
-            <div class="layout-grid">
-                <div>
-                    <p class="fade-up delay-1">Once assembled, the structure stiffness equation is <strong>Q = K D</strong> <span class="citation">[cite: 445]</span>.</p>
-                    <p class="fade-up delay-2">By partitioning the matrices into known (k) and unknown (u) components <span class="citation">[cite: 450]</span>, we solve directly for unconstrained displacements.</p>
-                    <div class="math-panel fade-up delay-3">
-                        Q<sub>k</sub> = K<sub>11</sub> D<sub>u</sub> + K<sub>12</sub> D<sub>k</sub> <span class="citation">[cite: 455]</span> <br><br>
-                        Assuming D<sub>k</sub> = 0 <span class="citation">[cite: 459]</span>: <br>
-                        <span class="math-accent">D<sub>u</sub> = K<sub>11</sub><sup>-1</sup> Q<sub>k</sub></span> <span class="citation">[cite: 462]</span>
-                    </div>
-                </div>
-                <div class="graphic-container fade-up delay-2">
-                    <svg viewBox="0 0 300 300" width="100%" height="100%">
-                        <rect x="30" y="30" width="240" height="240" fill="none" stroke="#3b82f6" stroke-width="3" rx="8"/>
-                        <line x1="30" y1="160" x2="270" y2="160" stroke="#30363d" stroke-width="3" stroke-dasharray="8,4"/>
-                        <line x1="160" y1="30" x2="160" y2="270" stroke="#30363d" stroke-width="3" stroke-dasharray="8,4"/>
-                        <text x="80" y="105" fill="#34d399" font-family="Roboto Mono" font-size="28" font-weight="bold">K₁₁</text>
-                        <text x="195" y="105" fill="#94a3b8" font-family="Roboto Mono" font-size="24">K₁₂</text>
-                        <text x="80" y="225" fill="#94a3b8" font-family="Roboto Mono" font-size="24">K₂₁</text>
-                        <text x="195" y="225" fill="#3b82f6" font-family="Roboto Mono" font-size="24">K₂₂</text>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.7</span> Nodal Coordinates for Inclined Supports</h2>
-            <div class="layout-grid">
-                <div>
-                    <p class="fade-up delay-1">When a truss is supported by a roller on an incline, constraint cannot be defined using a single horizontal/vertical global system <span class="citation">[cite: 883]</span>.</p>
-                    <p class="fade-up delay-2">We use nodal coordinates (x'', y'') located at the inclined support <span class="citation">[cite: 886]</span>.</p>
-                    <p class="fade-up delay-3">The stiffness matrix expands to incorporate direction cosines mapping local (x'), global (x, y), and nodal (x'', y'') axes <span class="citation">[cite: 930, 931]</span>.</p>
-                </div>
-                <div class="graphic-container fade-up delay-2">
-                    <svg viewBox="0 0 300 200" width="100%" height="100%">
-                        <line x1="50" y1="150" x2="200" y2="50" stroke="#3b82f6" stroke-width="6"/>
-                        <g stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4">
-                            <line x1="200" y1="50" x2="260" y2="50"/>
-                            <line x1="200" y1="50" x2="200" y2="-10"/>
-                        </g>
-                        <g stroke="#10b981" stroke-width="2">
-                            <line x1="200" y1="50" x2="250" y2="10"/>
-                            <line x1="200" y1="50" x2="160" y2="-5"/>
-                        </g>
-                        <circle cx="200" cy="50" r="8" fill="#161b22" stroke="#f59e0b" stroke-width="3"/>
-                        <text x="240" y="20" fill="#10b981" font-family="Roboto Mono" font-size="12">x''</text>
-                        <text x="150" y="-10" fill="#10b981" font-family="Roboto Mono" font-size="12">y''</text>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.8</span> Thermal Changes & Fabrication Errors</h2>
-            <p class="fade-up delay-1">Modifications required when members change length due to thermal expansion or fabrication errors. This is crucial for indeterminate trusses <span class="citation">[cite: 1107, 1111]</span>.</p>
-            <div class="layout-grid">
-                <div class="math-panel fade-up delay-2">
-                    <strong>Thermal Fixed-End Forces:</strong><br>
-                    (q<sub>N</sub>)<sub>0</sub> = AEαΔT <span class="citation">[cite: 1116]</span><br>
-                    (q<sub>F</sub>)<sub>0</sub> = -AEαΔT <span class="citation">[cite: 1116]</span>
-                </div>
-                <div class="math-panel fade-up delay-2" style="border-left-color: var(--secondary);">
-                    <strong>Fabrication Fixed-End Forces:</strong><br>
-                    (q<sub>N</sub>)<sub>0</sub> = AEΔL / L <span class="citation">[cite: 1122]</span><br>
-                    (q<sub>F</sub>)<sub>0</sub> = -AEΔL / L <span class="citation">[cite: 1122]</span>
-                </div>
-            </div>
-            <div class="math-panel fade-up delay-3" style="text-align: center;">
-                <strong>Modified Stiffness Equation:</strong><br>
-                Q = K D + Q<sub>0</sub> <span class="citation">[cite: 1130]</span><br>
-                <span style="font-size: 0.9rem; color: var(--text-muted);">Where Q<sub>0</sub> is the column matrix of initial fixed-end forces <span class="citation">[cite: 1132]</span>.</span>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h2><span>14.9</span> Space-Truss Analysis</h2>
-            <p class="fade-up delay-1">Three-dimensional analysis requires extending the transformation matrix to include the z-axis <span class="citation">[cite: 1292]</span>.</p>
-            
-            <div class="layout-grid">
-                <div class="math-panel fade-up delay-2">
-                    λ<sub>z</sub> = (z<sub>F</sub> - z<sub>N</sub>) / L <span class="citation">[cite: 1320]</span>
-                </div>
-                <div class="math-panel fade-up delay-2">
-                    T = 
-                    <div class="math-matrix" style="grid-template-columns: repeat(6, 1fr); font-size: 0.8rem;">
-                        <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span> <span>λ<sub>z</sub></span> <span>0</span> <span>0</span> <span>0</span>
-                        <span>0</span> <span>0</span> <span>0</span> <span>λ<sub>x</sub></span> <span>λ<sub>y</sub></span> <span>λ<sub>z</sub></span>
-                    </div> <span class="citation">[cite: 1324]</span>
-                </div>
-            </div>
-            <p class="fade-up delay-3" style="text-align: center; margin-top: 20px;">The resulting space-truss member stiffness matrix is a symmetric 6x6 matrix <span class="citation">[cite: 1331]</span> referencing N<sub>x</sub>, N<sub>y</sub>, N<sub>z</sub>, F<sub>x</sub>, F<sub>y</sub>, F<sub>z</sub> <span class="citation">[cite: 1334]</span>.</p>
-        </div>
-
-        <div class="slide">
-            <h2>Course Assessment Protocol</h2>
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-                
-                <div class="exam-callout fade-up delay-1" style="width: 85%;">
-                    <i class="fas fa-clipboard-list" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-                    <h3 style="font-size: 1.8rem; color: var(--white); margin-bottom: 15px;">Critical Assessment Rule</h3>
-                    <p style="font-size: 1.3rem; font-weight: 500; color: #cbd5e1; margin: 0;">
-                        As a strict reminder for grading and exam preparation: <br>
-                        <strong style="color: var(--accent); font-size: 1.5rem;">Students are only required to answer THREE questions for Part B of their assessment.</strong>
-                    </p>
-                </div>
-
-                <div class="fade-up delay-2" style="text-align: center; max-width: 900px; margin-top: 40px;">
-                    <p>The manual derivation of <strong>[K₁₁]</strong> partitioning forms the core of engineering software operations. Practice assembling the global matrices systematically to ensure success!</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="slide-counter" id="slideCounter">1 / 9</div>
-        <div class="controls">
-            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled><i class="fas fa-chevron-left"></i></button>
-            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
-        </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+  <!-- STREAMING_CHUNK:Rendering main resume container and header... -->
+  <div class="resume">
+    
+    <!-- Floating Action Menu -->
+    <div class="action-menu">
+      <button class="action-btn" onclick="window.print()" aria-label="Print or Save as PDF">
+        <i class="fa-solid fa-print"></i>
+        <span class="tooltip">Save as PDF</span>
+      </button>
+      <button class="action-btn" onclick="copyLink()" aria-label="Copy Profile Link">
+        <i class="fa-solid fa-link"></i>
+        <span class="tooltip">Copy Link</span>
+      </button>
     </div>
 
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        const progressBar = document.getElementById('progressBar');
-        const slideCounter = document.getElementById('slideCounter');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+    <header>
+      <div class="header-graphics" aria-hidden="true">
+        <div class="scan-line"></div>
+        <div class="somalia-star" aria-hidden="true">★</div>
+        <svg class="blueprint-lines" viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="18,162 88,162 128,112 198,112 236,70 336,70 386,30"/>
+          <polyline points="42,42 92,88 158,88 214,136 304,136 372,184"/>
+          <line x1="96" y1="18" x2="96" y2="188"/>
+          <line x1="300" y1="28" x2="300" y2="178"/>
+          <circle cx="88" cy="162" r="7"/>
+          <circle cx="198" cy="112" r="7"/>
+          <circle cx="336" cy="70" r="7"/>
+          <circle cx="304" cy="136" r="7"/>
+        </svg>
+      </div>
+      <div class="header-inner">
+        <div class="portrait-shell" aria-label="Portrait of Mahdi Yussuf Abdi">
+          <div class="portrait-frame">
+            <i class="fa-solid fa-user-tie portrait-placeholder"></i>
+            <!-- UPDATED IMAGE SOURCE -->
+            <img src="file_00000000a36472469988b3bcfb03994b (2).png" alt="Mahdi Yussuf Abdi portrait" onerror="this.style.display='none'">
+          </div>
+          <div class="portrait-tag"><i class="fa-solid fa-compass-drafting"></i> MYA</div>
+        </div>
+        <div class="head-text">
+          <h1 class="name">Mahdi Yussuf <span>Abdi</span></h1>
+          <div class="role-line">Civil Engineer &middot; Lecturer &middot; Infrastructure Risk &amp; Resilience Specialist</div>
+          <div class="accent-bar"></div>
+          <div class="titles reveal">
+            <span><i class="fa-solid fa-compass-drafting"></i>&nbsp; Civil Engineer</span>
+            <span><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Post-Graduate Lecturer</span>
+            <span><i class="fa-solid fa-shield-halved"></i>&nbsp; Infrastructure Risk &amp; Resilience</span>
+            <span style="border-color: rgba(155,125,227,0.36); background: linear-gradient(135deg, rgba(103,80,164,0.32), rgba(255,255,255,0.08));"><i class="fa-solid fa-certificate"></i>&nbsp; PMP&reg; &middot; PMI-PMOCP&trade;</span>
+          </div>
+        </div>
+      </div>
 
-        function updateUI() {
-            const progress = (currentSlide / (totalSlides - 1)) * 100;
-            progressBar.style.width = progress + '%';
-            
-            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+      <div class="contact-bar reveal">
+        <a href="tel:+252612427777"><i class="fa-solid fa-phone"></i> +252 61 242 7777</a>
+        <a href="mailto:engmahdjo@outlook.com"><i class="fa-solid fa-envelope"></i> engmahdjo@outlook.com</a>
+        <span><i class="fa-solid fa-location-dot"></i> Mogadishu, Somalia</span>
+        <a href="https://linkedin.com/in/mahdi-jimale" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/mahdi-jimale</a>
+      </div>
+    </header>
 
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === totalSlides - 1;
+    <!-- STREAMING_CHUNK:Rendering stats banner... -->
+    <div class="stats">
+      <div class="stat">
+        <i class="fa-solid fa-calendar-check"></i>
+        <div class="num">10<span>+</span></div>
+        <div class="lbl">Years Experience</div>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-diagram-project"></i>
+        <div class="num">50<span>+</span></div>
+        <div class="lbl">Projects Managed</div>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-sack-dollar"></i>
+        <div class="num"><span>$</span>4.5M<span>+</span></div>
+        <div class="lbl">Contract Value</div>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-faucet-drip"></i>
+        <div class="num">24</div>
+        <div class="lbl">Boreholes Built</div>
+      </div>
+      <div class="stat">
+        <i class="fa-solid fa-people-group"></i>
+        <div class="num">144K<span>+</span></div>
+        <div class="lbl">Beneficiaries</div>
+      </div>
+    </div>
+
+    <!-- STREAMING_CHUNK:Rendering main body sections (Profile, Experience, Projects)... -->
+    <div class="body">
+      <main>
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-user-tie"></i> Professional Profile</h2>
+          <p class="summary">
+            Civil Engineer with an <strong>M.Sc. in Construction Management</strong> and over 10 years
+            of combined academic and professional experience across infrastructure delivery, engineering
+            education, and risk-informed project implementation. Combines teaching in civil and structural
+            engineering with practical leadership of humanitarian infrastructure, <strong>WASH</strong>,
+            and climate-resilient construction projects in challenging environments. Master's dissertation,
+            <em>Effect of Mismanagement of Construction Materials on Construction Projects in Mogadishu</em>,
+            strengthened a research interest in construction performance and infrastructure reliability —
+            with particular motivation toward data-informed and smart approaches for safer structures.
+          </p>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-flask"></i> Research Interests</h2>
+          <div class="chips">
+            <span class="chip"><i class="fa-solid fa-building-shield"></i> Structural performance &amp; safety</span>
+            <span class="chip"><i class="fa-solid fa-scale-balanced"></i> Risk-informed decision-making</span>
+            <span class="chip"><i class="fa-solid fa-bridge"></i> Resilient infrastructure systems</span>
+            <span class="chip"><i class="fa-solid fa-clipboard-check"></i> Construction quality management</span>
+            <span class="chip"><i class="fa-solid fa-database"></i> Data-driven civil engineering</span>
+            <span class="chip"><i class="fa-solid fa-satellite-dish"></i> Smart monitoring for safer structures</span>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-chalkboard-user"></i> Academic Experience</h2>
+          <ul class="timeline">
+            <li class="tl-item">
+              <h3>Post-Graduate Lecturer — Project Risk Management</h3>
+              <div class="org"><span>SIMAD University, Mogadishu</span><span class="yr">Jan 2026 – Present</span></div>
+              <ul>
+                <li>Deliver post-graduate instruction in Project Risk Management (EMRM5103), covering the full risk cycle from identification through response and monitoring.</li>
+                <li>Teach qualitative and quantitative risk analysis, contingency planning, and structured decision-making under uncertainty.</li>
+                <li>Introduce analytical tools including Pareto charts, histograms, decision trees, and risk registers.</li>
+              </ul>
+            </li>
+            <li class="tl-item">
+              <h3>Lecturer — Civil &amp; Structural Engineering</h3>
+              <div class="org"><span>Universities in Mogadishu</span><span class="yr">2017 – Present</span></div>
+              <ul>
+                <li>Delivered instruction in Structural Analysis, CAD, Traffic Engineering, and Construction Management.</li>
+                <li>Taught and supported <strong>500+ students</strong> across civil and structural engineering disciplines.</li>
+                <li>Connected academic content with real-world engineering and construction practice in Somalia.</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-briefcase"></i> Professional Experience</h2>
+          <ul class="timeline">
+            <li class="tl-item">
+              <h3>Water &amp; Construction Supervisor</h3>
+              <div class="org"><span>Direct Aid Somalia</span><span class="yr">2019 – Present</span></div>
+              <ul>
+                <li>Manage 50+ projects across water, infrastructure, educational, and community facilities, with contracts exceeding <strong>USD 4.5 million</strong>.</li>
+                <li>Contributed to 24 boreholes and related water infrastructure, improving access for more than <strong>144,000 beneficiaries</strong>.</li>
+                <li>Lead a multidisciplinary team of 15+ engineers across planning, implementation, field supervision, and quality control.</li>
+                <li>Supervise site selection, technical reviews, QA/QC, and sustainability assessments across multiple locations.</li>
+              </ul>
+            </li>
+            <li class="tl-item">
+              <h3>Senior Advisor — Water &amp; Climate Resilience</h3>
+              <div class="org"><span>State Government, Somalia</span><span class="yr">2021 – Present</span></div>
+              <ul>
+                <li>Provide technical and strategic advisory support on water security, climate resilience, and water resources management.</li>
+                <li>Support assessment and development of subsurface dam proposals to strengthen regional water access.</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-map-location-dot"></i> Key Infrastructure Projects</h2>
+          <div class="project-grid">
+            <div class="project-card">
+              <div class="project-header">
+                <span class="project-title">Regional Borehole & WASH Network</span>
+                <span class="project-role">Lead Engineer</span>
+              </div>
+              <p class="project-desc">Oversaw the site selection, drilling, structural design of elevated tanks, and pipeline network distribution for rural communities. Focused heavily on drought-resilience and community O&M.</p>
+              <div class="project-metrics">
+                <span><i class="fa-solid fa-droplet"></i> 24 Boreholes</span>
+                <span><i class="fa-solid fa-users"></i> 144k+ Impacted</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-header">
+                <span class="project-title">Climate-Resilient Subsurface Dams</span>
+                <span class="project-role">Technical Advisor</span>
+              </div>
+              <p class="project-desc">Reviewed engineering proposals and provided strategic guidance on the construction of sand dams to capture seasonal runoff, significantly improving local water tables.</p>
+              <div class="project-metrics">
+                <span><i class="fa-solid fa-leaf"></i> Sustainability focus</span>
+                <span><i class="fa-solid fa-money-bill-wave"></i> Regional funding</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-book-open"></i> Publications & Papers</h2>
+          <div class="pub-item">
+            <div class="pub-title"><i class="fa-solid fa-file-pdf"></i> Effect of Mismanagement of Construction Materials on Construction Projects in Mogadishu</div>
+            <div class="pub-meta">Lincoln University &middot; M.Sc. Dissertation &middot; <span>2023</span></div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-graduation-cap"></i> Education</h2>
+          <div class="edu-item">
+            <h3>M.Sc. in Construction Management</h3>
+            <div class="edu-meta"><span>Lincoln University</span><span class="year">2023</span></div>
+            <div class="diss">Dissertation: Effect of Mismanagement of Construction Materials on Construction Projects in Mogadishu</div>
+          </div>
+          <div class="edu-item">
+            <h3>B.Sc. in Civil Engineering</h3>
+            <div class="edu-meta"><span>Red Sea University</span><span class="year">2014</span></div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-award"></i> Verified Credly Badges</h2>
+          <p class="badges-intro"><i class="fa-solid fa-shield-check"></i> Independently verifiable digital credentials — click to view public verification.</p>
+          <div class="badge-grid">
+            <a class="badge" href="https://www.credly.com/badges/8f0ce11a-892e-4345-b2d7-5448ea91790d/public_url" target="_blank" rel="noopener">
+              <img src="https://images.credly.com/images/731e7ef4-9b0c-4d7b-ab65-23cc699c0aa3/twitter_thumb_201604_blob" alt="Project Management Professional (PMP) badge" loading="lazy">
+              <span class="b-name">Project Management Professional (PMP)&reg;</span>
+              <span class="b-iss">Project Management Institute</span>
+              <span class="b-verify"><i class="fa-solid fa-circle-check"></i> Verify</span>
+            </a>
+            <a class="badge" href="https://www.credly.com/badges/92d786fe-67cd-4d33-9c40-bf4836595619/public_url" target="_blank" rel="noopener">
+              <img src="https://images.credly.com/images/65e4186f-86c4-4ce3-9126-79b473bfbe56/twitter_thumb_201604_blob" alt="PMI PMO Certified Professional badge" loading="lazy">
+              <span class="b-name">PMO Certified Professional (PMI-PMOCP)&trade;</span>
+              <span class="b-iss">Project Management Institute</span>
+              <span class="b-verify"><i class="fa-solid fa-circle-check"></i> Verify</span>
+            </a>
+            <a class="badge" href="https://www.credly.com/badges/256808c3-9070-49e0-a381-45034e46eb5e/public_url" target="_blank" rel="noopener">
+              <img src="https://images.credly.com/images/4ec2fe89-dd5d-4180-ac85-b82d385fbce7/twitter_thumb_201604_blob" alt="PMI Construction Professional badge" loading="lazy">
+              <span class="b-name">PMI Construction Professional (PMI-CP)&trade;</span>
+              <span class="b-iss">Project Management Institute</span>
+              <span class="b-verify"><i class="fa-solid fa-circle-check"></i> Verify</span>
+            </a>
+            <a class="badge" href="https://www.credly.com/badges/1df21a73-5d96-4108-9eca-be02a21ea818/public_url" target="_blank" rel="noopener">
+              <img src="https://images.credly.com/images/94f4180f-4139-4529-9cd1-c5ae95b12f5f/twitter_thumb_201604_blob" alt="McKinsey.org Forward Program badge" loading="lazy">
+              <span class="b-name">McKinsey.org Forward Program</span>
+              <span class="b-iss">McKinsey.org</span>
+              <span class="b-verify"><i class="fa-solid fa-circle-check"></i> Verify</span>
+            </a>
+            <a class="badge" href="https://www.credly.com/badges/bdb5512a-1652-4613-86a6-0b704158edbf/public_url" target="_blank" rel="noopener">
+              <img src="https://images.credly.com/images/0c4e1dd5-5d3c-4974-9720-e09af4302e5e/twitter_thumb_201604_blob" alt="Practical Application of Gen AI for Project Managers badge" loading="lazy">
+              <span class="b-name">Practical Application of Gen AI for PMs</span>
+              <span class="b-iss">Project Management Institute</span>
+              <span class="b-verify"><i class="fa-solid fa-circle-check"></i> Verify</span>
+            </a>
+            <a class="badge" href="https://www.credly.com/badges/ea377008-49e1-464a-8094-7e07f47e8a46/public_url" target="_blank" rel="noopener">
+              <img src="https://images.credly.com/images/aa42e8b5-b36d-4b8c-abbe-c6a6f51fd7d9/twitter_thumb_201604_blob" alt="Talking to AI: Prompt Engineering for Project Managers badge" loading="lazy">
+              <span class="b-name">Talking to AI: Prompt Engineering for PMs</span>
+              <span class="b-iss">Project Management Institute</span>
+              <span class="b-verify"><i class="fa-solid fa-circle-check"></i> Verify</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <!-- STREAMING_CHUNK:Rendering sidebar... -->
+      <aside class="sidebar">
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-certificate"></i> Certifications</h2>
+          <div class="certs">
+            <div class="cert" style="border-left-color: var(--pmi);">
+              <i class="fa-solid fa-diagram-project" style="color: var(--pmi);"></i>
+              <span>Project Management Professional<small>PMP&reg; — PMI, 2025</small></span>
+            </div>
+            <div class="cert" style="border-left-color: var(--somalia);">
+              <i class="fa-solid fa-sitemap" style="color: var(--somalia-deep);"></i>
+              <span>PMO Certified Professional<small>PMI-PMOCP&trade; — 2025</small></span>
+            </div>
+            <div class="cert" style="border-left-color: var(--water);">
+              <i class="fa-solid fa-arrow-trend-up" style="color: var(--water);"></i>
+              <span>McKinsey.org Forward Program<small>Completed Dec 2025</small></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-users-gear"></i> Affiliations</h2>
+          <div class="certs">
+            <div class="cert" style="border-left-color: var(--navy);">
+              <i class="fa-solid fa-id-badge"></i>
+              <span>Saudi Council of Engineers<small>Member No. 292083</small></span>
+            </div>
+            <div class="cert" style="border-left-color: var(--navy);">
+              <i class="fa-solid fa-building-user"></i>
+              <span>Project Management Institute<small>Active Member</small></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-gears"></i> Technical Skills</h2>
+          <div class="skills-grid">
+            <div class="skill-cat">Engineering Software</div>
+            <div class="skill"><i class="fa-solid fa-drafting-compass"></i> AutoCAD</div>
+            <div class="skill"><i class="fa-solid fa-cube"></i> Revit</div>
+            <div class="skill"><i class="fa-solid fa-building"></i> SAP2000</div>
+            <div class="skill"><i class="fa-solid fa-timeline"></i> Primavera P6</div>
+            <div class="skill-cat">Analytical Tools</div>
+            <div class="skill"><i class="fa-solid fa-table-list"></i> Risk Registers</div>
+            <div class="skill"><i class="fa-solid fa-code-branch"></i> Decision Trees</div>
+            <div class="skill-cat">Core Competencies</div>
+            <div class="skill"><i class="fa-solid fa-helmet-safety"></i> Site Supervision</div>
+            <div class="skill"><i class="fa-solid fa-clipboard-check"></i> QA / QC</div>
+            <div class="skill"><i class="fa-solid fa-triangle-exclamation"></i> Risk Assessment</div>
+            <div class="skill"><i class="fa-solid fa-handshake"></i> Stakeholder Mgmt</div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-language"></i> Languages</h2>
+          <div class="lang">
+            <div class="lang-head"><b>Somali</b><span>Native</span></div>
+            <div class="bar"><i style="--w:100%"></i></div>
+          </div>
+          <div class="lang">
+            <div class="lang-head"><b>Arabic</b><span>Fluent</span></div>
+            <div class="bar"><i style="--w:92%"></i></div>
+          </div>
+          <div class="lang">
+            <div class="lang-head"><b>English</b><span>Advanced</span></div>
+            <div class="bar"><i style="--w:88%"></i></div>
+          </div>
+        </section>
+
+        <section class="reveal">
+          <h2 class="sec-title"><i class="fa-solid fa-trophy"></i> Achievements</h2>
+          <div class="certs">
+            <div class="cert"><i class="fa-solid fa-sack-dollar"></i><span>USD 4.5M+ Managed</span></div>
+            <div class="cert"><i class="fa-solid fa-faucet-drip"></i><span>24 Boreholes Built</span></div>
+            <div class="cert"><i class="fa-solid fa-users"></i><span>15+ Engineers Led</span></div>
+            <div class="cert"><i class="fa-solid fa-user-graduate"></i><span>500+ Students Taught</span></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- STREAMING_CHUNK:Rendering footer and notification toast... -->
+    <footer>
+      <i class="fa-solid fa-seedling"></i> Building safer, more resilient infrastructure for the communities that need it most.
+    </footer>
+    
+    <div id="toast" class="toast">
+      <i class="fa-solid fa-circle-check"></i> <span>Link copied to clipboard!</span>
+    </div>
+  </div>
+
+<!-- STREAMING_CHUNK:Initializing JavaScript logic (Scroll reveal, Counters, Clipboard)... -->
+<script>
+  // Intersection Observer for scroll animations (fade in)
+  const revealElements = document.querySelectorAll('.reveal');
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -50px 0px',
+    threshold: 0.1
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target); // Only animate once
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // Counter Animations
+  const counters = document.querySelectorAll('.stat .num');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function parseNumber(text) {
+    return Number(text.replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  function animateCounter(el) {
+    if (prefersReducedMotion) return;
+    const original = el.textContent.trim();
+    const target = parseNumber(original);
+    const prefix = original.includes('$') ? '$' : '';
+    const suffix = original.includes('K') ? 'K+' : original.includes('+') ? '+' : '';
+    const decimals = original.includes('.') ? 1 : 0;
+    const duration = 1500;
+    const start = performance.now();
+
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const value = target * eased;
+      el.innerHTML = `<span>${prefix}</span>${value.toFixed(decimals)}<span>${suffix}</span>`;
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.innerHTML = original.replace('$', '<span>$</span>').replace('+', '<span>+</span>');
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const seenCounters = new WeakSet();
+    const counterObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !seenCounters.has(entry.target)) {
+          seenCounters.add(entry.target);
+          setTimeout(() => animateCounter(entry.target), 300); // slight delay for visual effect
         }
+      });
+    }, { threshold: 0.35 });
+    counters.forEach(counter => counterObserver.observe(counter));
+  }
 
-        function changeSlide(direction) {
-            slides[currentSlide].classList.remove('active');
-            
-            const oldSlide = slides[currentSlide];
-            const newSlide = oldSlide.cloneNode(true);
-            oldSlide.parentNode.replaceChild(newSlide, oldSlide);
-
-            currentSlide += direction;
-
-            const updatedSlides = document.querySelectorAll('.slide');
-            updatedSlides[currentSlide].classList.add('active');
-
-            updateUI();
-        }
-
-        updateUI();
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) changeSlide(1);
-            if (e.key === 'ArrowLeft' && currentSlide > 0) changeSlide(-1);
-        });
-    </script>
+  // Copy Profile Link functionality
+  function copyLink() {
+    const url = window.location.href;
+    const toast = document.getElementById('toast');
+    
+    // Fallback for document.execCommand if clipboard API fails
+    try {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast();
+      }).catch(err => {
+        fallbackCopyTextToClipboard(url);
+      });
+    } catch (e) {
+      fallbackCopyTextToClipboard(url);
+    }
+    
+    function fallbackCopyTextToClipboard(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast();
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+      document.body.removeChild(textArea);
+    }
+    
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  }
+</script>
 </body>
 </html>
+```eof
