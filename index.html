@@ -373,9 +373,21 @@
   html[dir="rtl"] .cert[style*="border-left-color"] { border-right-width: 4px; border-right-style: solid; }
   html[dir="rtl"] .timeline .tl-item { border-left: none; }
   html[dir="rtl"] .lang-toggle { direction: ltr; }
-  .lang-toggle { display: flex; align-items: center; gap: 4px; }
-  .lang-toggle button { border: none; background: transparent; color: inherit; font: inherit; font-weight: 700; font-size: 0.72rem; cursor: pointer; padding: 4px 6px; border-radius: 6px; opacity: 0.55; transition: opacity 0.2s; }
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 38px;
+    padding: 0 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 19px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .lang-toggle button { border: none; background: transparent; color: #fff; font: inherit; font-weight: 700; font-size: 0.72rem; cursor: pointer; padding: 4px 6px; border-radius: 6px; opacity: 0.55; transition: opacity 0.2s; }
   .lang-toggle button.active { opacity: 1; text-decoration: underline; }
+  .lang-toggle span { color: #fff; }
 </style>
 </head>
 <body>
@@ -384,7 +396,7 @@
     
     <!-- Floating Action Menu -->
     <div class="action-menu">
-      <div class="action-btn lang-toggle" aria-label="Switch language">
+      <div class="lang-toggle" aria-label="Switch language">
         <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
         <span style="opacity:0.4">/</span>
         <button id="btn-ar" onclick="setLang('ar')">AR</button>
@@ -571,6 +583,28 @@
                 <span><i class="fa-solid fa-money-bill-wave"></i> Regional funding</span>
               </div>
             </div>
+            <div class="project-card">
+              <div class="project-header">
+                <span class="project-title">Integrated Orphan Care Center — Baidoa</span>
+                <span class="project-role">Supervision &amp; Construction Management</span>
+              </div>
+              <p class="project-desc">Supervised and managed the construction and furnishing of an integrated orphan care center comprising 16 sub-projects — including two schools, a mosque, dormitories, a vocational training center, and a clinic — on a 40,000 m&sup2; site.</p>
+              <div class="project-metrics">
+                <span><i class="fa-solid fa-layer-group"></i> 16 Sub-Projects</span>
+                <span><i class="fa-solid fa-sack-dollar"></i> USD 3M+</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-header">
+                <span class="project-title">Secondary School — Jibaali</span>
+                <span class="project-role">Supervision &amp; Construction Management</span>
+              </div>
+              <p class="project-desc">Supervised and managed the construction and full furnishing of a secondary school in the Jibaali area.</p>
+              <div class="project-metrics">
+                <span><i class="fa-solid fa-school"></i> Full Furnishing</span>
+                <span><i class="fa-solid fa-sack-dollar"></i> USD 500K</span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -698,11 +732,13 @@
             <div class="skill-cat">Analytical Tools</div>
             <div class="skill"><i class="fa-solid fa-table-list"></i> Risk Registers</div>
             <div class="skill"><i class="fa-solid fa-code-branch"></i> Decision Trees</div>
+            <div class="skill"><i class="fa-solid fa-magnifying-glass-chart"></i> 5 Whys</div>
             <div class="skill-cat">Core Competencies</div>
             <div class="skill"><i class="fa-solid fa-helmet-safety"></i> Site Supervision</div>
             <div class="skill"><i class="fa-solid fa-clipboard-check"></i> QA / QC</div>
             <div class="skill"><i class="fa-solid fa-triangle-exclamation"></i> Risk Assessment</div>
             <div class="skill"><i class="fa-solid fa-handshake"></i> Stakeholder Mgmt</div>
+            <div class="skill"><i class="fa-solid fa-hand-holding-heart"></i> Community Consultation</div>
             <div class="skill-cat">Leadership &amp; Emotional Intelligence</div>
             <div class="skill"><i class="fa-solid fa-brain"></i> Emotional Intelligence (EQ)</div>
             <div class="skill"><i class="fa-solid fa-handshake-angle"></i> Conflict Resolution</div>
@@ -857,7 +893,7 @@
 
   // ---- Arabic / English translation toggle ----
   const i18nGroups = [
-    { sel: '.name', type: 'html', ar: ['مهدي يوسف <span>Abdi</span>'] },
+    { sel: '.name', type: 'html', ar: ['مهدي يوسف <span>عبدي</span>'] },
     { sel: '.role-line', type: 'text', ar: ['مهندس مدني · محاضر · أخصائي إدارة مخاطر البنية التحتية والمرونة'] },
     { sel: '.titles span', type: 'icon', ar: [
         'مهندس مدني',
@@ -905,15 +941,19 @@
         'قيادة إعداد مقترح شراكة استراتيجية قيد المناقشة بقيمة تتجاوز <strong>8 ملايين دولار أمريكي</strong> مع برنامج الأمم المتحدة الإنمائي في الصومال (2026–2029) لبرنامج متكامل للأمن المائي، شملت مذكرات المفهوم والشروط المرجعية وإطار التنفيذ المشترك.'
       ] },
     { sel: '.project-title', type: 'text', ar: [
-        'شبكة الآبار والمياه الإقليمية (WASH)', 'السدود تحت السطحية للمرونة المناخية'
+        'شبكة الآبار والمياه الإقليمية (WASH)', 'السدود تحت السطحية للمرونة المناخية',
+        'مركز رعاية الأيتام المتكامل — بيدوا', 'المدرسة الثانوية — جبيلي'
       ] },
-    { sel: '.project-role', type: 'text', ar: ['مهندس رئيسي', 'مستشار فني'] },
+    { sel: '.project-role', type: 'text', ar: ['مهندس رئيسي', 'مستشار فني', 'الإشراف وإدارة الإنشاء', 'الإشراف وإدارة الإنشاء'] },
     { sel: '.project-desc', type: 'text', ar: [
         'الإشراف على اختيار المواقع، والحفر، والتصميم الإنشائي للخزانات المرتفعة، وتوزيع شبكات الأنابيب للمجتمعات الريفية، مع تركيز كبير على الصمود أمام الجفاف والصيانة المجتمعية.',
-        'مراجعة المقترحات الهندسية وتقديم التوجيه الاستراتيجي لبناء السدود الرملية لالتقاط الجريان السطحي الموسمي، مما أدى إلى تحسين ملحوظ في مستويات المياه الجوفية المحلية.'
+        'مراجعة المقترحات الهندسية وتقديم التوجيه الاستراتيجي لبناء السدود الرملية لالتقاط الجريان السطحي الموسمي، مما أدى إلى تحسين ملحوظ في مستويات المياه الجوفية المحلية.',
+        'الإشراف وإدارة إنشاء وتأثيث مركز متكامل لرعاية الأيتام يضم 16 مشروعًا فرعيًا — منها مدرستان ومسجد ومهاجع ومركز تدريب مهني ومستوصف — على مساحة 40,000 م².',
+        'الإشراف وإدارة إنشاء مدرسة ثانوية في منطقة جبيلي مع تأثيثها بالكامل.'
       ] },
     { sel: '.project-metrics span', type: 'icon', ar: [
-        '24 بئرًا', 'أكثر من 144 ألف مستفيد', 'التركيز على الاستدامة', 'تمويل إقليمي'
+        '24 بئرًا', 'أكثر من 144 ألف مستفيد', 'التركيز على الاستدامة', 'تمويل إقليمي',
+        '16 مشروعًا فرعيًا', 'أكثر من 3 ملايين دولار', 'تأثيث كامل', '500 ألف دولار'
       ] },
     { sel: '.pub-meta', type: 'html', ar: ['Lincoln University &middot; رسالة ماجستير &middot; <span>2023</span>'] },
     { sel: '.edu-item h3', type: 'text', ar: ['ماجستير في إدارة الإنشاءات', 'بكالوريوس في الهندسة المدنية'] },
@@ -939,8 +979,8 @@
     { sel: '.skill-cat', type: 'text', ar: ['برمجيات هندسية', 'أدوات تحليلية', 'الكفاءات الأساسية', 'القيادة والذكاء العاطفي'] },
     { sel: '.skill', type: 'icon', ar: [
         'AutoCAD', 'Revit', 'SAP2000', 'Primavera P6',
-        'سجلات المخاطر', 'أشجار القرار',
-        'الإشراف الميداني', 'ضمان الجودة / مراقبة الجودة', 'تقييم المخاطر', 'إدارة أصحاب المصلحة',
+        'سجلات المخاطر', 'أشجار القرار', 'تحليل الأسباب الخمسة (5 Whys)',
+        'الإشراف الميداني', 'ضمان الجودة / مراقبة الجودة', 'تقييم المخاطر', 'إدارة أصحاب المصلحة', 'التشاور المجتمعي',
         'الذكاء العاطفي', 'حل النزاعات', 'قيادة الفرق', 'التواصل بين الثقافات'
       ] },
     { sel: '.lang-head b', type: 'text', ar: ['الصومالية', 'العربية', 'الإنجليزية'] },
