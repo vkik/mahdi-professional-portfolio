@@ -7,7 +7,7 @@
 <title>Mahdi Yussuf Abdi — Civil Engineer | Lecturer | Infrastructure Risk & Resilience Specialist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   /* STREAMING_CHUNK:Defining CSS variables and base reset... */
@@ -154,13 +154,12 @@
   
   .portrait-placeholder { font-size: 4rem; color: rgba(255,255,255,0.8); position: absolute; z-index: 0; }
   
-  /* Adjusted for the new image composition */
+  /* Adjusted for the new headshot photo */
   .portrait-frame img { 
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
-    object-position: 50% 20%; /* Moved up slightly to focus on the face */
-    transform: scale(1.3); /* Scaled up to crop out the lower body/desk */
+    object-position: 50% 12%; /* Centers on the face for the new headshot */
     filter: saturate(1.04) contrast(1.02); 
     position: relative; 
     z-index: 1; 
@@ -366,6 +365,17 @@
     footer { display: none; }
     a { text-decoration: none; }
   }
+  /* ---- Arabic / RTL support ---- */
+  html[dir="rtl"] body { font-family: 'Tajawal', 'Inter', sans-serif; }
+  html[dir="rtl"] .name, html[dir="rtl"] .b-name, html[dir="rtl"] h2, html[dir="rtl"] h3 { font-family: 'Tajawal', 'Inter', sans-serif; }
+  html[dir="rtl"] .contact-bar, html[dir="rtl"] .titles, html[dir="rtl"] .chips, html[dir="rtl"] .badge-grid { direction: rtl; }
+  html[dir="rtl"] .cert, html[dir="rtl"] .skill { border-left: none; }
+  html[dir="rtl"] .cert[style*="border-left-color"] { border-right-width: 4px; border-right-style: solid; }
+  html[dir="rtl"] .timeline .tl-item { border-left: none; }
+  html[dir="rtl"] .lang-toggle { direction: ltr; }
+  .lang-toggle { display: flex; align-items: center; gap: 4px; }
+  .lang-toggle button { border: none; background: transparent; color: inherit; font: inherit; font-weight: 700; font-size: 0.72rem; cursor: pointer; padding: 4px 6px; border-radius: 6px; opacity: 0.55; transition: opacity 0.2s; }
+  .lang-toggle button.active { opacity: 1; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -374,6 +384,11 @@
     
     <!-- Floating Action Menu -->
     <div class="action-menu">
+      <div class="action-btn lang-toggle" aria-label="Switch language">
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <span style="opacity:0.4">/</span>
+        <button id="btn-ar" onclick="setLang('ar')">AR</button>
+      </div>
       <button class="action-btn" onclick="window.print()" aria-label="Print or Save as PDF">
         <i class="fa-solid fa-print"></i>
         <span class="tooltip">Save as PDF</span>
@@ -464,14 +479,17 @@
         <section class="reveal">
           <h2 class="sec-title"><i class="fa-solid fa-user-tie"></i> Professional Profile</h2>
           <p class="summary">
-            Civil Engineer with an <strong>M.Sc. in Construction Management</strong> and over 10 years
-            of combined academic and professional experience across infrastructure delivery, engineering
-            education, and risk-informed project implementation. Combines teaching in civil and structural
-            engineering with practical leadership of humanitarian infrastructure, <strong>WASH</strong>,
-            and climate-resilient construction projects in challenging environments. Master's dissertation,
-            <em>Effect of Mismanagement of Construction Materials on Construction Projects in Mogadishu</em>,
-            strengthened a research interest in construction performance and infrastructure reliability —
-            with particular motivation toward data-informed and smart approaches for safer structures.
+            Civil Engineer and Senior Project Manager with over 10 years of combined leadership
+            across infrastructure delivery, engineering education, and organizational risk governance.
+            Holds an <strong>M.Sc. in Construction Management</strong> together with PMP&reg;, PMI-RMP&reg;,
+            PMI-PMOCP&trade;, and PMI-CP&trade; credentials — a certification portfolio built to lead PMO
+            structures, governance frameworks, and enterprise risk management at scale. Directs a
+            multidisciplinary team of 15+ engineers across a USD 4.5M+ <strong>WASH</strong> and
+            infrastructure portfolio at Direct Aid Somalia, and is leading a proposed <strong>USD 8M+</strong>
+            strategic partnership under discussion with UNDP Somalia for an integrated water security
+            programme — coordinating across donor, HQ, and field structures. Combines this operational
+            leadership with academic authority as a Post-Graduate Lecturer in Project Risk Management at
+            SIMAD University, translating field-tested governance practices into the next generation of engineering leaders.
           </p>
         </section>
 
@@ -522,14 +540,7 @@
                 <li>Contributed to 24 boreholes and related water infrastructure, improving access for more than <strong>144,000 beneficiaries</strong>.</li>
                 <li>Lead a multidisciplinary team of 15+ engineers across planning, implementation, field supervision, and quality control.</li>
                 <li>Supervise site selection, technical reviews, QA/QC, and sustainability assessments across multiple locations.</li>
-              </ul>
-            </li>
-            <li class="tl-item">
-              <h3>Senior Advisor — Water &amp; Climate Resilience</h3>
-              <div class="org"><span>State Government, Somalia</span><span class="yr">2021 – Present</span></div>
-              <ul>
-                <li>Provide technical and strategic advisory support on water security, climate resilience, and water resources management.</li>
-                <li>Support assessment and development of subsurface dam proposals to strengthen regional water access.</li>
+                <li>Leading the development of a proposed <strong>USD 8M+</strong> strategic partnership package with UNDP Somalia (2026–2029, under discussion) for an integrated water security programme, spanning concept notes, terms of reference, and a co-delivery framework.</li>
               </ul>
             </li>
           </ul>
@@ -638,7 +649,7 @@
       <aside class="sidebar">
         <section class="reveal">
           <h2 class="sec-title"><i class="fa-solid fa-certificate"></i> Certifications</h2>
-          <div class="certs">
+          <div class="certs" id="certifications-list">
             <div class="cert" style="border-left-color: var(--pmi);">
               <i class="fa-solid fa-diagram-project" style="color: var(--pmi);"></i>
               <span>Project Management Professional<small>PMP&reg; — PMI, 2025</small></span>
@@ -651,6 +662,10 @@
               <i class="fa-solid fa-sitemap" style="color: var(--somalia-deep);"></i>
               <span>PMO Certified Professional<small>PMI-PMOCP&trade; — 2025</small></span>
             </div>
+            <div class="cert" style="border-left-color: var(--green);">
+              <i class="fa-solid fa-helmet-safety" style="color: var(--green);"></i>
+              <span>Construction Professional<small>PMI-CP&trade; — PMI, 2026</small></span>
+            </div>
             <div class="cert" style="border-left-color: var(--water);">
               <i class="fa-solid fa-arrow-trend-up" style="color: var(--water);"></i>
               <span>McKinsey.org Forward Program<small>Completed Dec 2025</small></span>
@@ -658,7 +673,7 @@
           </div>
         </section>
 
-        <section class="reveal">
+        <section class="reveal" id="sec-affiliations">
           <h2 class="sec-title"><i class="fa-solid fa-users-gear"></i> Affiliations</h2>
           <div class="certs">
             <div class="cert" style="border-left-color: var(--navy);">
@@ -688,6 +703,11 @@
             <div class="skill"><i class="fa-solid fa-clipboard-check"></i> QA / QC</div>
             <div class="skill"><i class="fa-solid fa-triangle-exclamation"></i> Risk Assessment</div>
             <div class="skill"><i class="fa-solid fa-handshake"></i> Stakeholder Mgmt</div>
+            <div class="skill-cat">Leadership &amp; Emotional Intelligence</div>
+            <div class="skill"><i class="fa-solid fa-brain"></i> Emotional Intelligence (EQ)</div>
+            <div class="skill"><i class="fa-solid fa-handshake-angle"></i> Conflict Resolution</div>
+            <div class="skill"><i class="fa-solid fa-people-group"></i> Team Leadership</div>
+            <div class="skill"><i class="fa-solid fa-comments"></i> Cross-Cultural Communication</div>
           </div>
         </section>
 
@@ -707,7 +727,7 @@
           </div>
         </section>
 
-        <section class="reveal">
+        <section class="reveal" id="sec-achievements">
           <h2 class="sec-title"><i class="fa-solid fa-trophy"></i> Achievements</h2>
           <div class="certs">
             <div class="cert"><i class="fa-solid fa-sack-dollar"></i><span>USD 4.5M+ Managed</span></div>
@@ -834,6 +854,143 @@
       }, 3000);
     }
   }
+
+  // ---- Arabic / English translation toggle ----
+  const i18nGroups = [
+    { sel: '.name', type: 'html', ar: ['مهدي يوسف <span>Abdi</span>'] },
+    { sel: '.role-line', type: 'text', ar: ['مهندس مدني · محاضر · أخصائي إدارة مخاطر البنية التحتية والمرونة'] },
+    { sel: '.titles span', type: 'icon', ar: [
+        'مهندس مدني',
+        'محاضر دراسات عليا',
+        'مخاطر ومرونة البنية التحتية',
+        'PMP® · PMI-RMP® · PMI-PMOCP™'
+      ] },
+    { sel: '.contact-bar span', type: 'icon', ar: ['مقديشو، الصومال'] },
+    { sel: '.stats .lbl', type: 'text', ar: [
+        'سنوات الخبرة', 'المشاريع المُدارة', 'قيمة العقود', 'الآبار المحفورة', 'المستفيدون'
+      ] },
+    { sel: '.summary', type: 'html', ar: [
+        'مهندس مدني ومدير مشاريع أول يمتلك أكثر من 10 سنوات من القيادة المتكاملة في تنفيذ البنية التحتية، والتعليم الهندسي، وحوكمة المخاطر المؤسسية. حاصل على <strong>درجة الماجستير في إدارة الإنشاءات</strong>، إلى جانب شهادات PMP®‏ وPMI-RMP®‏ وPMI-PMOCP™‏ وPMI-CP™‏ — وهي حزمة اعتماد مصمَّمة لقيادة هياكل مكاتب إدارة المشاريع (PMO)، وأطر الحوكمة، وإدارة المخاطر المؤسسية على نطاق واسع. يقود فريقًا متعدد التخصصات من أكثر من 15 مهندسًا ضمن محفظة مشاريع <strong>مياه وصرف صحي (WASH)</strong> وبنية تحتية تتجاوز قيمتها 4.5 مليون دولار أمريكي لدى Direct Aid Somalia، ويقود إعداد مقترح شراكة استراتيجية قيد المناقشة بقيمة تتجاوز 8 ملايين دولار أمريكي مع برنامج الأمم المتحدة الإنمائي (UNDP) في الصومال لبرنامج متكامل للأمن المائي — بالتنسيق بين الجهات المانحة والمقر الرئيسي والميدان. يجمع بين هذه القيادة التنفيذية والمكانة الأكاديمية بصفته محاضر دراسات عليا في إدارة مخاطر المشاريع بجامعة SIMAD، ناقلاً ممارسات الحوكمة المُختبرة ميدانيًا إلى الجيل القادم من قادة الهندسة.'
+      ] },
+    { sel: '.sec-title', type: 'icon', ar: [
+        'الملف المهني', 'الاهتمامات البحثية', 'الخبرة الأكاديمية', 'الخبرة المهنية',
+        'مشاريع البنية التحتية الرئيسية', 'المنشورات والأبحاث', 'التعليم',
+        'شارات Credly الموثّقة', 'الشهادات', 'العضويات', 'المهارات التقنية',
+        'اللغات', 'الإنجازات'
+      ] },
+    { sel: '.chip', type: 'icon', ar: [
+        'الأداء الإنشائي والسلامة', 'اتخاذ القرار القائم على المخاطر',
+        'أنظمة البنية التحتية المرنة', 'إدارة جودة الإنشاءات',
+        'الهندسة المدنية القائمة على البيانات', 'المراقبة الذكية لسلامة المنشآت'
+      ] },
+    { sel: '.timeline h3', type: 'text', ar: [
+        'محاضر دراسات عليا — إدارة مخاطر المشاريع',
+        'محاضر — الهندسة المدنية والإنشائية',
+        'مشرف المياه والإنشاءات'
+      ] },
+    { sel: '.org .yr', type: 'text', ar: [
+        'يناير 2026 – حتى الآن', '2017 – حتى الآن', '2019 – حتى الآن'
+      ] },
+    { sel: '.timeline .tl-item > ul > li', type: 'html', ar: [
+        'تقديم تدريس على مستوى الدراسات العليا في إدارة مخاطر المشاريع (EMRM5103)، يغطي دورة المخاطر الكاملة من التحديد وحتى الاستجابة والمراقبة.',
+        'تدريس التحليل النوعي والكمي للمخاطر، والتخطيط للطوارئ، واتخاذ القرار المنظم في ظل عدم اليقين.',
+        'تقديم أدوات تحليلية تشمل مخططات باريتو، والرسوم البيانية، وأشجار القرار، وسجلات المخاطر.',
+        'تدريس التحليل الإنشائي، والتصميم بمساعدة الحاسوب (CAD)، وهندسة المرور، وإدارة الإنشاءات.',
+        'تدريس ودعم أكثر من <strong>500 طالب</strong> في تخصصات الهندسة المدنية والإنشائية.',
+        'ربط المحتوى الأكاديمي بالممارسة الهندسية والإنشائية الواقعية في الصومال.',
+        'إدارة أكثر من 50 مشروعًا في مجالات المياه والبنية التحتية والمرافق التعليمية والمجتمعية، بعقود تتجاوز قيمتها <strong>4.5 مليون دولار أمريكي</strong>.',
+        'المساهمة في حفر 24 بئرًا وما يرتبط بها من بنية تحتية مائية، لتحسين الوصول لأكثر من <strong>144,000 مستفيد</strong>.',
+        'قيادة فريق متعدد التخصصات يضم أكثر من 15 مهندسًا عبر التخطيط والتنفيذ والإشراف الميداني ومراقبة الجودة.',
+        'الإشراف على اختيار المواقع، والمراجعات الفنية، وضمان الجودة/مراقبة الجودة، وتقييمات الاستدامة في مواقع متعددة.',
+        'قيادة إعداد مقترح شراكة استراتيجية قيد المناقشة بقيمة تتجاوز <strong>8 ملايين دولار أمريكي</strong> مع برنامج الأمم المتحدة الإنمائي في الصومال (2026–2029) لبرنامج متكامل للأمن المائي، شملت مذكرات المفهوم والشروط المرجعية وإطار التنفيذ المشترك.'
+      ] },
+    { sel: '.project-title', type: 'text', ar: [
+        'شبكة الآبار والمياه الإقليمية (WASH)', 'السدود تحت السطحية للمرونة المناخية'
+      ] },
+    { sel: '.project-role', type: 'text', ar: ['مهندس رئيسي', 'مستشار فني'] },
+    { sel: '.project-desc', type: 'text', ar: [
+        'الإشراف على اختيار المواقع، والحفر، والتصميم الإنشائي للخزانات المرتفعة، وتوزيع شبكات الأنابيب للمجتمعات الريفية، مع تركيز كبير على الصمود أمام الجفاف والصيانة المجتمعية.',
+        'مراجعة المقترحات الهندسية وتقديم التوجيه الاستراتيجي لبناء السدود الرملية لالتقاط الجريان السطحي الموسمي، مما أدى إلى تحسين ملحوظ في مستويات المياه الجوفية المحلية.'
+      ] },
+    { sel: '.project-metrics span', type: 'icon', ar: [
+        '24 بئرًا', 'أكثر من 144 ألف مستفيد', 'التركيز على الاستدامة', 'تمويل إقليمي'
+      ] },
+    { sel: '.pub-meta', type: 'html', ar: ['Lincoln University &middot; رسالة ماجستير &middot; <span>2023</span>'] },
+    { sel: '.edu-item h3', type: 'text', ar: ['ماجستير في إدارة الإنشاءات', 'بكالوريوس في الهندسة المدنية'] },
+    { sel: '.diss', type: 'text', ar: ['رسالة الماجستير: Effect of Mismanagement of Construction Materials on Construction Projects in Mogadishu'] },
+    { sel: '.b-name', type: 'text', ar: [
+        'أخصائي إدارة مشاريع معتمد (PMP)®',
+        'أخصائي معتمد لإدارة مكتب المشاريع (PMI-PMOCP)™',
+        'أخصائي إنشاءات معتمد من PMI ‏(PMI-CP)™',
+        'أخصائي إدارة المخاطر المعتمد (PMI-RMP)®',
+        'برنامج McKinsey.org Forward',
+        'التطبيق العملي للذكاء الاصطناعي التوليدي لمديري المشاريع',
+        'التحدث مع الذكاء الاصطناعي: هندسة الأوامر لمديري المشاريع'
+      ] },
+    { sel: '.b-verify', type: 'icon', ar: ['تحقق','تحقق','تحقق','تحقق','تحقق','تحقق','تحقق'] },
+    { sel: '#certifications-list .cert span', type: 'certTitle', ar: [
+        'أخصائي إدارة المشاريع المحترف',
+        'أخصائي إدارة المخاطر',
+        'أخصائي معتمد لإدارة مكتب المشاريع',
+        'أخصائي الإنشاءات',
+        'برنامج McKinsey.org Forward'
+      ] },
+    { sel: '#sec-affiliations .cert small', type: 'text', ar: ['رقم العضوية 292083', 'عضو نشط'] },
+    { sel: '.skill-cat', type: 'text', ar: ['برمجيات هندسية', 'أدوات تحليلية', 'الكفاءات الأساسية', 'القيادة والذكاء العاطفي'] },
+    { sel: '.skill', type: 'icon', ar: [
+        'AutoCAD', 'Revit', 'SAP2000', 'Primavera P6',
+        'سجلات المخاطر', 'أشجار القرار',
+        'الإشراف الميداني', 'ضمان الجودة / مراقبة الجودة', 'تقييم المخاطر', 'إدارة أصحاب المصلحة',
+        'الذكاء العاطفي', 'حل النزاعات', 'قيادة الفرق', 'التواصل بين الثقافات'
+      ] },
+    { sel: '.lang-head b', type: 'text', ar: ['الصومالية', 'العربية', 'الإنجليزية'] },
+    { sel: '.lang-head span', type: 'text', ar: ['اللغة الأم', 'بطلاقة', 'متقدم'] },
+    { sel: '#sec-achievements .cert span', type: 'text', ar: [
+        'أُدير أكثر من 4.5 مليون دولار أمريكي', 'أكثر من 24 بئرًا تم حفرها',
+        'قيادة أكثر من 15 مهندسًا', 'تدريس أكثر من 500 طالب'
+      ] },
+    { sel: 'footer', type: 'icon', ar: ['نحو بنية تحتية أكثر أمانًا ومرونة للمجتمعات الأكثر احتياجًا.'] },
+    { sel: '#toast span', type: 'text', ar: ['تم نسخ الرابط!'] },
+    { sel: '.tooltip', type: 'text', ar: ['حفظ كملف PDF', 'نسخ الرابط'] }
+  ];
+
+  // Snapshot original English content once on load
+  i18nGroups.forEach(group => {
+    group.els = Array.from(document.querySelectorAll(group.sel));
+    group.en = group.els.map(el => {
+      if (group.type === 'icon') return el.lastChild ? el.lastChild.textContent : '';
+      if (group.type === 'certTitle') return el.childNodes[0] ? el.childNodes[0].textContent : '';
+      if (group.type === 'html') return el.innerHTML;
+      return el.textContent;
+    });
+  });
+
+  let currentLang = 'en';
+  function setLang(lang) {
+    if (lang === currentLang) return;
+    currentLang = lang;
+    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('lang', lang);
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+
+    i18nGroups.forEach(group => {
+      group.els.forEach((el, i) => {
+        const value = lang === 'ar' ? group.ar[i] : group.en[i];
+        if (value === undefined) return;
+        if (group.type === 'icon') {
+          if (el.lastChild) el.lastChild.textContent = ' ' + value;
+        } else if (group.type === 'certTitle') {
+          if (el.childNodes[0]) el.childNodes[0].textContent = value;
+        } else if (group.type === 'html') {
+          el.innerHTML = value;
+        } else {
+          el.textContent = value;
+        }
+      });
+    });
+  }
+
 </script>
 </body>
 </html>
