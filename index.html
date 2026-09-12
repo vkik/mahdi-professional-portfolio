@@ -388,25 +388,33 @@
   .lang-toggle span { color: #fff; }
   .in-progress-note { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.78rem; color: var(--ink-soft); font-style: italic; display: flex; align-items: center; gap: 8px; }
   .in-progress-note i { color: var(--steel); font-style: normal; flex-shrink: 0; }
-  .org-masthead { display: flex; align-items: center; justify-content: center; gap: 20px; background: linear-gradient(120deg, var(--da-green-deep), var(--da-green-mid)); padding: 14px 16px; direction: ltr; }
-  .masthead-img { height: 42px; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35)); }
+  .org-masthead { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 20px; padding: 16px 16px 8px; direction: ltr; }
+  .masthead-img { height: 42px; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35)); transition: transform 0.3s ease, filter 0.3s ease; }
   .masthead-logo { height: 52px; }
-  .org-masthead img[alt="Somalia flag"] { border-radius: 3px; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.85), 0 2px 6px rgba(0,0,0,0.35); filter: none; }
+  .org-masthead img[alt="Somalia flag"] { border-radius: 3px; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.85), 0 2px 6px rgba(0,0,0,0.35); filter: none; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .masthead-img:hover { transform: translateY(-3px) scale(1.06); filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)) brightness(1.05); }
+  .org-masthead img[alt="Somalia flag"]:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 0 0 1.5px rgba(255,255,255,0.95), 0 6px 14px rgba(0,0,0,0.45); }
+  .org-masthead::after {
+    content: ""; position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    background: linear-gradient(100deg, transparent 40%, rgba(255,255,255,0.16) 50%, transparent 60%);
+    background-size: 250% 100%; animation: masthead-shine 6s ease-in-out infinite;
+  }
+  @keyframes masthead-shine { 0% { background-position: 120% 0; } 45%, 100% { background-position: -20% 0; } }
   @media (max-width: 480px) { .masthead-img { height: 32px; } .masthead-logo { height: 40px; } .org-masthead { gap: 12px; } }
 </style>
 </head>
 <body>
   <!-- STREAMING_CHUNK:Rendering main resume container and header... -->
   <div class="resume">
-    
-    <!-- Organizational masthead -->
-    <div class="org-masthead" aria-label="Organizational affiliation">
-      <img src="somalia-flag.png" alt="Somalia flag" class="masthead-img">
-      <img src="direct-aid-logo.png" alt="Direct Aid Society - Somalia" class="masthead-img masthead-logo">
-      <img src="kuwait-badge.png" alt="Kuwait is by your side" class="masthead-img">
-    </div>
 
     <header>
+      <!-- Organizational masthead - shares the header's own background, no seam -->
+      <div class="org-masthead" aria-label="Organizational affiliation">
+        <img src="somalia-flag.png" alt="Somalia flag" class="masthead-img">
+        <img src="direct-aid-logo.png" alt="Direct Aid Society - Somalia" class="masthead-img masthead-logo">
+        <img src="kuwait-badge.png" alt="Kuwait is by your side" class="masthead-img">
+      </div>
+
       <!-- Floating Action Menu -->
       <div class="action-menu">
         <div class="lang-toggle" aria-label="Switch language">
