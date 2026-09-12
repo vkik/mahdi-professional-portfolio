@@ -388,9 +388,10 @@
   .lang-toggle span { color: #fff; }
   .in-progress-note { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.78rem; color: var(--ink-soft); font-style: italic; display: flex; align-items: center; gap: 8px; }
   .in-progress-note i { color: var(--steel); font-style: normal; flex-shrink: 0; }
-  .org-masthead { display: flex; align-items: center; justify-content: center; gap: 20px; background: #fff; padding: 12px 16px; direction: ltr; }
-  .masthead-img { height: 42px; width: auto; display: block; }
+  .org-masthead { display: flex; align-items: center; justify-content: center; gap: 20px; background: linear-gradient(120deg, var(--da-green-deep), var(--da-green-mid)); padding: 14px 16px; direction: ltr; }
+  .masthead-img { height: 42px; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35)); }
   .masthead-logo { height: 52px; }
+  .org-masthead img[alt="Somalia flag"] { border-radius: 3px; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.85), 0 2px 6px rgba(0,0,0,0.35); filter: none; }
   @media (max-width: 480px) { .masthead-img { height: 32px; } .masthead-logo { height: 40px; } .org-masthead { gap: 12px; } }
 </style>
 </head>
@@ -405,24 +406,24 @@
       <img src="kuwait-badge.png" alt="Kuwait is by your side" class="masthead-img">
     </div>
 
-    <!-- Floating Action Menu -->
-    <div class="action-menu">
-      <div class="lang-toggle" aria-label="Switch language">
-        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
-        <span style="opacity:0.4">/</span>
-        <button id="btn-ar" onclick="setLang('ar')">AR</button>
-      </div>
-      <button class="action-btn" onclick="window.print()" aria-label="Print or Save as PDF">
-        <i class="fa-solid fa-print"></i>
-        <span class="tooltip">Save as PDF</span>
-      </button>
-      <button class="action-btn" onclick="copyLink()" aria-label="Copy Profile Link">
-        <i class="fa-solid fa-link"></i>
-        <span class="tooltip">Copy Link</span>
-      </button>
-    </div>
-
     <header>
+      <!-- Floating Action Menu -->
+      <div class="action-menu">
+        <div class="lang-toggle" aria-label="Switch language">
+          <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+          <span style="opacity:0.4">/</span>
+          <button id="btn-ar" onclick="setLang('ar')">AR</button>
+        </div>
+        <button class="action-btn" onclick="window.print()" aria-label="Print or Save as PDF">
+          <i class="fa-solid fa-print"></i>
+          <span class="tooltip">Save as PDF</span>
+        </button>
+        <button class="action-btn" onclick="copyLink()" aria-label="Copy Profile Link">
+          <i class="fa-solid fa-link"></i>
+          <span class="tooltip">Copy Link</span>
+        </button>
+      </div>
+
       <div class="header-graphics" aria-hidden="true">
         <div class="scan-line"></div>
         <svg class="blueprint-lines" viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg">
