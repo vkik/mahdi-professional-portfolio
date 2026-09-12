@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mahdi Yussuf Abdi — Civil Engineer | Lecturer | Infrastructure Risk & Resilience Specialist</title>
+<title>Mahdi Yussuf Abdi — Civil Engineer | Senior Project Manager | Infrastructure Risk & Resilience Specialist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -19,8 +19,8 @@
     --somalia-deep:#1f6fbd;
     --water:       #10b8d7;
     --water-soft:  #7ee3f4;
-    --green:       #24966f;
-    --green-soft:  #64c79d;
+    --green:       #2b9947;
+    --green-soft:  #7dd39a;
     --pmi:         #6750a4;
     --pmi-soft:    #9b7de3;
     --steel:       #607487;
@@ -32,6 +32,9 @@
     --line:        #d9e7ed;
     --shadow:      0 24px 70px -24px rgba(7, 24, 39, 0.42);
     --shadow-hover:0 30px 80px -20px rgba(7, 24, 39, 0.5);
+    --da-green-deep: #07230f;
+    --da-green-mid:  #145a26;
+    --da-gold-soft:  #e3c37a;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -107,8 +110,8 @@
   header {
     position: relative;
     background:
-      linear-gradient(135deg, rgba(7,24,39,0.98) 0%, rgba(18,51,79,0.96) 34%, rgba(31,111,189,0.90) 68%, rgba(16,184,215,0.72) 100%),
-      linear-gradient(90deg, var(--navy-deep), var(--somalia));
+      linear-gradient(135deg, rgba(7,35,15,0.98) 0%, rgba(20,90,38,0.96) 40%, rgba(43,153,71,0.92) 75%, rgba(255,255,255,0.18) 100%),
+      linear-gradient(90deg, var(--da-green-deep), var(--green));
     color: #fff; padding: 46px 48px 42px; overflow: hidden;
   }
   header::before {
@@ -138,17 +141,12 @@
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
     transform: skewX(-18deg); animation: scan-pass 8s ease-in-out infinite;
   }
-  .somalia-star {
-    position: absolute; right: 48px; bottom: 34px; color: rgba(255,255,255,0.18);
-    font-size: 118px; line-height: 1; transform: rotate(7deg); text-shadow: 0 0 34px rgba(126,227,244,0.30);
-    animation: star-float 7s ease-in-out infinite;
-  }
 
   .header-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 32px; }
   
   /* UPDATED IMAGE STYLING */
   .portrait-shell { position: relative; flex: 0 0 148px; width: 148px; height: 148px; border-radius: 28px; isolation: isolate; animation: portrait-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.08s both; }
-  .portrait-shell::before { content: ""; position: absolute; inset: -8px; border-radius: 34px; background: conic-gradient(from 120deg, var(--water-soft), rgba(255,255,255,0.45), var(--somalia), var(--pmi-soft), var(--green-soft), var(--water-soft)); animation: ring-turn 9s linear infinite; z-index: -2; }
+  .portrait-shell::before { content: ""; position: absolute; inset: -8px; border-radius: 34px; background: conic-gradient(from 120deg, #ffffff, var(--green-soft), var(--green), var(--green-soft), #ffffff); animation: ring-turn 9s linear infinite; z-index: -2; }
   .portrait-shell::after { content: ""; position: absolute; inset: -2px; border-radius: 30px; background: rgba(7, 24, 39, 0.86); z-index: -1; }
   .portrait-frame { position: relative; width: 100%; height: 100%; border-radius: 26px; overflow: hidden; border: 1px solid rgba(255,255,255,0.22); box-shadow: 0 24px 50px -22px rgba(0,0,0,0.62); background: var(--navy-soft); display: flex; align-items: center; justify-content: center; }
   
@@ -171,9 +169,9 @@
   /* STREAMING_CHUNK:Styling typography and metadata... */
   .head-text { flex: 1; min-width: 0; }
   .name { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
-  .name span { color: var(--water-soft); text-shadow: 0 0 24px rgba(126,227,244,0.28); }
+  .name span { color: #ffffff; text-shadow: 0 0 24px rgba(255,255,255,0.35); }
   .role-line { font-size: 0.95rem; font-weight: 500; color: #d7edf7; margin-top: 6px; }
-  .accent-bar { width: 64px; height: 4px; background: linear-gradient(90deg, var(--water-soft), var(--green-soft), var(--earth)); border-radius: 4px; margin: 14px 0 16px; position: relative; overflow: hidden; }
+  .accent-bar { width: 64px; height: 4px; background: linear-gradient(90deg, var(--green-soft), var(--green), #ffffff); border-radius: 4px; margin: 14px 0 16px; position: relative; overflow: hidden; }
   .accent-bar::after { content: ""; position: absolute; inset: 0; width: 38%; background: rgba(255,255,255,0.72); filter: blur(2px); animation: accent-sweep 2.8s ease-in-out infinite; }
   
   .titles { display: flex; flex-wrap: wrap; gap: 8px 10px; max-width: 760px; }
@@ -388,6 +386,13 @@
   .lang-toggle button { border: none; background: transparent; color: #fff; font: inherit; font-weight: 700; font-size: 0.72rem; cursor: pointer; padding: 4px 6px; border-radius: 6px; opacity: 0.55; transition: opacity 0.2s; }
   .lang-toggle button.active { opacity: 1; text-decoration: underline; }
   .lang-toggle span { color: #fff; }
+  .in-progress-note { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.78rem; color: var(--ink-soft); font-style: italic; display: flex; align-items: center; gap: 8px; }
+  .in-progress-note i { color: var(--steel); font-style: normal; flex-shrink: 0; }
+  .affiliation-strip { position: absolute; top: 72px; right: 24px; z-index: 2; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; max-width: 300px; direction: ltr; }
+  .flag-badge { display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 10px; padding: 5px 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+  .badge-img { height: 26px; width: auto; display: block; }
+  .org-logo { height: 30px; }
+  @media (max-width: 720px) { .affiliation-strip { position: static; justify-content: flex-start; margin-top: 12px; max-width: none; } }
 </style>
 </head>
 <body>
@@ -414,7 +419,6 @@
     <header>
       <div class="header-graphics" aria-hidden="true">
         <div class="scan-line"></div>
-        <div class="somalia-star" aria-hidden="true">★</div>
         <svg class="blueprint-lines" viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg">
           <polyline points="18,162 88,162 128,112 198,112 236,70 336,70 386,30"/>
           <polyline points="42,42 92,88 158,88 214,136 304,136 372,184"/>
@@ -424,7 +428,15 @@
           <circle cx="198" cy="112" r="7"/>
           <circle cx="336" cy="70" r="7"/>
           <circle cx="304" cy="136" r="7"/>
+          <!-- water droplet motif, ties graphic to WASH/water infrastructure work -->
+          <path d="M88 130 C88 118, 100 108, 100 108 C100 108, 112 118, 112 130 C112 137, 106 142, 100 142 C94 142, 88 137, 88 130 Z" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+          <path d="M292 96 C292 84, 304 74, 304 74 C304 74, 316 84, 316 96 C316 103, 310 108, 304 108 C298 108, 292 103, 292 96 Z" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
         </svg>
+      </div>
+      <div class="affiliation-strip" aria-label="Organizational affiliation">
+        <span class="flag-badge" style="order:1;"><img src="somalia-flag.png" alt="Somalia flag" class="badge-img"></span>
+        <span class="flag-badge org-badge" style="order:2;"><img src="direct-aid-logo.png" alt="Direct Aid Society - Somalia" class="badge-img org-logo"></span>
+        <span class="flag-badge" style="order:3;"><img src="kuwait-badge.png" alt="Kuwait is by your side" class="badge-img"></span>
       </div>
       <div class="header-inner">
         <div class="portrait-shell" aria-label="Portrait of Mahdi Yussuf Abdi">
@@ -437,11 +449,11 @@
         </div>
         <div class="head-text">
           <h1 class="name">Mahdi Yussuf <span>Abdi</span></h1>
-          <div class="role-line">Civil Engineer &middot; Lecturer &middot; Infrastructure Risk &amp; Resilience Specialist</div>
+          <div class="role-line">Civil Engineer &middot; Senior Project Manager &middot; Infrastructure Risk &amp; Resilience Specialist</div>
           <div class="accent-bar"></div>
           <div class="titles reveal">
             <span><i class="fa-solid fa-compass-drafting"></i>&nbsp; Civil Engineer</span>
-            <span><i class="fa-solid fa-chalkboard-user"></i>&nbsp; Post-Graduate Lecturer</span>
+            <span><i class="fa-solid fa-briefcase"></i>&nbsp; Senior Project Manager</span>
             <span><i class="fa-solid fa-shield-halved"></i>&nbsp; Infrastructure Risk &amp; Resilience</span>
             <span style="border-color: rgba(155,125,227,0.36); background: linear-gradient(135deg, rgba(103,80,164,0.32), rgba(255,255,255,0.08));"><i class="fa-solid fa-certificate"></i>&nbsp; PMP&reg; &middot; PMI-RMP&reg; &middot; PMI-PMOCP&trade;</span>
           </div>
@@ -492,16 +504,16 @@
           <h2 class="sec-title"><i class="fa-solid fa-user-tie"></i> Professional Profile</h2>
           <p class="summary">
             Civil Engineer and Senior Project Manager with over 10 years of combined leadership
-            across infrastructure delivery, engineering education, and organizational risk governance.
+            across infrastructure delivery and organizational risk governance.
             Holds an <strong>M.Sc. in Construction Management</strong> together with PMP&reg;, PMI-RMP&reg;,
             PMI-PMOCP&trade;, and PMI-CP&trade; credentials — a certification portfolio built to lead PMO
             structures, governance frameworks, and enterprise risk management at scale. Directs a
             multidisciplinary team of 15+ engineers across a USD 8M+ <strong>WASH</strong> and
             infrastructure portfolio at Direct Aid Somalia, and is leading a proposed <strong>USD 8M+</strong>
             strategic partnership under discussion with UNDP Somalia for an integrated water security
-            programme — coordinating across donor, HQ, and field structures. Combines this operational
-            leadership with academic authority as a Post-Graduate Lecturer in Project Risk Management at
-            SIMAD University, translating field-tested governance practices into the next generation of engineering leaders.
+            programme — coordinating across donor, HQ, and field structures. Combines operational delivery
+            with organizational governance, translating field-tested practices into stronger institutional
+            systems at Direct Aid Somalia.
           </p>
         </section>
 
@@ -515,30 +527,6 @@
             <span class="chip"><i class="fa-solid fa-database"></i> Data-driven civil engineering</span>
             <span class="chip"><i class="fa-solid fa-satellite-dish"></i> Smart monitoring for safer structures</span>
           </div>
-        </section>
-
-        <section class="reveal">
-          <h2 class="sec-title"><i class="fa-solid fa-chalkboard-user"></i> Academic Experience</h2>
-          <ul class="timeline">
-            <li class="tl-item">
-              <h3>Post-Graduate Lecturer — Project Risk Management</h3>
-              <div class="org"><span>SIMAD University, Mogadishu</span><span class="yr">Jan 2026 – Present</span></div>
-              <ul>
-                <li>Deliver post-graduate instruction in Project Risk Management (EMRM5103), covering the full risk cycle from identification through response and monitoring.</li>
-                <li>Teach qualitative and quantitative risk analysis, contingency planning, and structured decision-making under uncertainty.</li>
-                <li>Introduce analytical tools including Pareto charts, histograms, decision trees, and risk registers.</li>
-              </ul>
-            </li>
-            <li class="tl-item">
-              <h3>Lecturer — Civil &amp; Structural Engineering</h3>
-              <div class="org"><span>Universities in Mogadishu</span><span class="yr">2017 – Present</span></div>
-              <ul>
-                <li>Delivered instruction in Structural Analysis, CAD, Traffic Engineering, and Construction Management.</li>
-                <li>Taught and supported <strong>500+ students</strong> across civil and structural engineering disciplines.</li>
-                <li>Connected academic content with real-world engineering and construction practice in Somalia.</li>
-              </ul>
-            </li>
-          </ul>
         </section>
 
         <section class="reveal">
@@ -564,7 +552,7 @@
             <div class="project-card">
               <div class="project-header">
                 <span class="project-title">Regional Borehole & WASH Network</span>
-                <span class="project-role">Lead Engineer</span>
+                <span class="project-role">Project Manager</span>
               </div>
               <p class="project-desc">Oversaw the site selection, drilling, structural design of elevated tanks, and pipeline network distribution for rural communities. Focused heavily on drought-resilience and community O&M.</p>
               <div class="project-metrics">
@@ -597,10 +585,10 @@
             </div>
             <div class="project-card">
               <div class="project-header">
-                <span class="project-title">Secondary School — Jibaali</span>
+                <span class="project-title">Secondary School — Gebilay</span>
                 <span class="project-role">Supervision &amp; Construction Management</span>
               </div>
-              <p class="project-desc">Supervised and managed the construction and full furnishing of a secondary school in the Jibaali area, serving 1,800 students, with an estimated 6,000+ indirect beneficiaries.</p>
+              <p class="project-desc">Supervised and managed the construction and full furnishing of a secondary school in the Gebilay area, serving 1,800 students, with an estimated 6,000+ indirect beneficiaries.</p>
               <div class="project-metrics">
                 <span><i class="fa-solid fa-school"></i> Full Furnishing</span>
                 <span><i class="fa-solid fa-sack-dollar"></i> USD 500K</span>
@@ -707,6 +695,7 @@
               <span>McKinsey.org Forward Program<small>Completed Dec 2025</small></span>
             </div>
           </div>
+          <p class="in-progress-note"><i class="fa-solid fa-hourglass-half"></i> In Progress: (CSPP)&trade; Certification Preparation Course — 20 PDUs / contact hours completed via PM Tricks; official certification pending.</p>
         </section>
 
         <section class="reveal" id="sec-affiliations">
@@ -771,7 +760,7 @@
             <div class="cert"><i class="fa-solid fa-sack-dollar"></i><span>USD 8M+ Managed</span></div>
             <div class="cert"><i class="fa-solid fa-faucet-drip"></i><span>24 Boreholes Built</span></div>
             <div class="cert"><i class="fa-solid fa-users"></i><span>15+ Engineers Led</span></div>
-            <div class="cert"><i class="fa-solid fa-user-graduate"></i><span>500+ Students Taught</span></div>
+            <div class="cert"><i class="fa-solid fa-people-group"></i><span>158K+ Beneficiaries Reached</span></div>
           </div>
         </section>
       </aside>
@@ -896,10 +885,10 @@
   // ---- Arabic / English translation toggle ----
   const i18nGroups = [
     { sel: '.name', type: 'html', ar: ['مهدي يوسف <span>عبدي</span>'] },
-    { sel: '.role-line', type: 'text', ar: ['مهندس مدني · محاضر · أخصائي إدارة مخاطر البنية التحتية والمرونة'] },
+    { sel: '.role-line', type: 'text', ar: ['مهندس مدني · مدير مشاريع أول · أخصائي إدارة مخاطر البنية التحتية والمرونة'] },
     { sel: '.titles span', type: 'icon', ar: [
         'مهندس مدني',
-        'محاضر دراسات عليا',
+        'مدير مشاريع أول',
         'مخاطر ومرونة البنية التحتية',
         'PMP® · PMI-RMP® · PMI-PMOCP™'
       ] },
@@ -908,10 +897,10 @@
         'سنوات الخبرة', 'المشاريع المُدارة', 'قيمة العقود', 'الآبار المحفورة', 'المستفيدون'
       ] },
     { sel: '.summary', type: 'html', ar: [
-        'مهندس مدني ومدير مشاريع أول يمتلك أكثر من 10 سنوات من القيادة المتكاملة في تنفيذ البنية التحتية، والتعليم الهندسي، وحوكمة المخاطر المؤسسية. حاصل على <strong>درجة الماجستير في إدارة الإنشاءات</strong>، إلى جانب شهادات PMP®‏ وPMI-RMP®‏ وPMI-PMOCP™‏ وPMI-CP™‏ — وهي حزمة اعتماد مصمَّمة لقيادة هياكل مكاتب إدارة المشاريع (PMO)، وأطر الحوكمة، وإدارة المخاطر المؤسسية على نطاق واسع. يقود فريقًا متعدد التخصصات من أكثر من 15 مهندسًا ضمن محفظة مشاريع <strong>مياه وصرف صحي (WASH)</strong> وبنية تحتية تتجاوز قيمتها 8 ملايين دولار أمريكي لدى Direct Aid Somalia، ويقود إعداد مقترح شراكة استراتيجية قيد المناقشة بقيمة تتجاوز 8 ملايين دولار أمريكي مع برنامج الأمم المتحدة الإنمائي (UNDP) في الصومال لبرنامج متكامل للأمن المائي — بالتنسيق بين الجهات المانحة والمقر الرئيسي والميدان. يجمع بين هذه القيادة التنفيذية والمكانة الأكاديمية بصفته محاضر دراسات عليا في إدارة مخاطر المشاريع بجامعة SIMAD، ناقلاً ممارسات الحوكمة المُختبرة ميدانيًا إلى الجيل القادم من قادة الهندسة.'
+        'مهندس مدني ومدير مشاريع أول يمتلك أكثر من 10 سنوات من القيادة المتكاملة في تنفيذ البنية التحتية وحوكمة المخاطر المؤسسية. حاصل على <strong>درجة الماجستير في إدارة الإنشاءات</strong>، إلى جانب شهادات PMP®‏ وPMI-RMP®‏ وPMI-PMOCP™‏ وPMI-CP™‏ — وهي حزمة اعتماد مصمَّمة لقيادة هياكل مكاتب إدارة المشاريع (PMO)، وأطر الحوكمة، وإدارة المخاطر المؤسسية على نطاق واسع. يقود فريقًا متعدد التخصصات من أكثر من 15 مهندسًا ضمن محفظة مشاريع <strong>مياه وصرف صحي (WASH)</strong> وبنية تحتية تتجاوز قيمتها 8 ملايين دولار أمريكي لدى Direct Aid Somalia، ويقود إعداد مقترح شراكة استراتيجية قيد المناقشة بقيمة تتجاوز 8 ملايين دولار أمريكي مع برنامج الأمم المتحدة الإنمائي (UNDP) في الصومال لبرنامج متكامل للأمن المائي — بالتنسيق بين الجهات المانحة والمقر الرئيسي والميدان. يجمع بين التنفيذ العملياتي والحوكمة المؤسسية، ناقلاً الممارسات المُختبرة ميدانيًا إلى أنظمة مؤسسية أقوى داخل Direct Aid Somalia.'
       ] },
     { sel: '.sec-title', type: 'icon', ar: [
-        'الملف المهني', 'الاهتمامات البحثية', 'الخبرة الأكاديمية', 'الخبرة المهنية',
+        'الملف المهني', 'الاهتمامات البحثية', 'الخبرة المهنية',
         'مشاريع البنية التحتية الرئيسية', 'المنشورات والأبحاث', 'التعليم',
         'شارات Credly الموثّقة', 'الشهادات', 'العضويات', 'المهارات التقنية',
         'اللغات', 'الإنجازات'
@@ -922,20 +911,12 @@
         'الهندسة المدنية القائمة على البيانات', 'المراقبة الذكية لسلامة المنشآت'
       ] },
     { sel: '.timeline h3', type: 'text', ar: [
-        'محاضر دراسات عليا — إدارة مخاطر المشاريع',
-        'محاضر — الهندسة المدنية والإنشائية',
         'مشرف المياه والإنشاءات'
       ] },
     { sel: '.org .yr', type: 'text', ar: [
-        'يناير 2026 – حتى الآن', '2017 – حتى الآن', '2019 – حتى الآن'
+        '2019 – حتى الآن'
       ] },
     { sel: '.timeline .tl-item > ul > li', type: 'html', ar: [
-        'تقديم تدريس على مستوى الدراسات العليا في إدارة مخاطر المشاريع (EMRM5103)، يغطي دورة المخاطر الكاملة من التحديد وحتى الاستجابة والمراقبة.',
-        'تدريس التحليل النوعي والكمي للمخاطر، والتخطيط للطوارئ، واتخاذ القرار المنظم في ظل عدم اليقين.',
-        'تقديم أدوات تحليلية تشمل مخططات باريتو، والرسوم البيانية، وأشجار القرار، وسجلات المخاطر.',
-        'تدريس التحليل الإنشائي، والتصميم بمساعدة الحاسوب (CAD)، وهندسة المرور، وإدارة الإنشاءات.',
-        'تدريس ودعم أكثر من <strong>500 طالب</strong> في تخصصات الهندسة المدنية والإنشائية.',
-        'ربط المحتوى الأكاديمي بالممارسة الهندسية والإنشائية الواقعية في الصومال.',
         'إدارة أكثر من 67 مشروعًا في مجالات المياه والبنية التحتية والمرافق التعليمية والمجتمعية، بعقود تتجاوز قيمتها <strong>8 ملايين دولار أمريكي</strong>.',
         'المساهمة في حفر 24 بئرًا وما يرتبط بها من بنية تحتية مائية، لتحسين الوصول لأكثر من <strong>144,000 مستفيد</strong>.',
         'قيادة فريق متعدد التخصصات يضم أكثر من 15 مهندسًا عبر التخطيط والتنفيذ والإشراف الميداني ومراقبة الجودة.',
@@ -946,7 +927,7 @@
         'شبكة الآبار والمياه الإقليمية (WASH)', 'السدود تحت السطحية للمرونة المناخية',
         'مركز رعاية الأيتام المتكامل — بيدوا', 'المدرسة الثانوية — جبيلي'
       ] },
-    { sel: '.project-role', type: 'text', ar: ['مهندس رئيسي', 'مستشار فني', 'الإشراف وإدارة الإنشاء', 'الإشراف وإدارة الإنشاء'] },
+    { sel: '.project-role', type: 'text', ar: ['مدير المشروع', 'مستشار فني', 'الإشراف وإدارة الإنشاء', 'الإشراف وإدارة الإنشاء'] },
     { sel: '.project-desc', type: 'text', ar: [
         'الإشراف على اختيار المواقع، والحفر، والتصميم الإنشائي للخزانات المرتفعة، وتوزيع شبكات الأنابيب للمجتمعات الريفية، مع تركيز كبير على الصمود أمام الجفاف والصيانة المجتمعية.',
         'مراجعة المقترحات الهندسية وتقديم التوجيه الاستراتيجي لبناء السدود الرملية لالتقاط الجريان السطحي الموسمي، مما أدى إلى تحسين ملحوظ في مستويات المياه الجوفية المحلية.',
@@ -979,6 +960,7 @@
         'برنامج McKinsey.org Forward'
       ] },
     { sel: '#sec-affiliations .cert small', type: 'text', ar: ['رقم العضوية 292083', 'عضو نشط'] },
+    { sel: '.in-progress-note', type: 'icon', ar: ['قيد الإنجاز: الدورة التحضيرية لشهادة (CSPP)™ — تم إنجاز 20 ساعة تدريبية (PDU) عبر PM Tricks؛ الشهادة الرسمية لم تصدر بعد.'] },
     { sel: '.skill-cat', type: 'text', ar: ['برمجيات هندسية', 'أدوات تحليلية', 'الكفاءات الأساسية', 'القيادة والذكاء العاطفي'] },
     { sel: '.skill', type: 'icon', ar: [
         'AutoCAD', 'Revit', 'SAP2000', 'Primavera P6',
@@ -990,7 +972,7 @@
     { sel: '.lang-head span', type: 'text', ar: ['اللغة الأم', 'بطلاقة', 'متقدم'] },
     { sel: '#sec-achievements .cert span', type: 'text', ar: [
         'أُدير أكثر من 8 ملايين دولار أمريكي', 'أكثر من 24 بئرًا تم حفرها',
-        'قيادة أكثر من 15 مهندسًا', 'تدريس أكثر من 500 طالب'
+        'قيادة أكثر من 15 مهندسًا', 'أكثر من 158 ألف مستفيد'
       ] },
     { sel: 'footer', type: 'icon', ar: ['نحو بنية تحتية أكثر أمانًا ومرونة للمجتمعات الأكثر احتياجًا.'] },
     { sel: '#toast span', type: 'text', ar: ['تم نسخ الرابط!'] },
