@@ -388,17 +388,23 @@
   .lang-toggle span { color: #fff; }
   .in-progress-note { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.78rem; color: var(--ink-soft); font-style: italic; display: flex; align-items: center; gap: 8px; }
   .in-progress-note i { color: var(--steel); font-style: normal; flex-shrink: 0; }
-  .affiliation-strip { position: absolute; top: 72px; right: 24px; z-index: 2; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; max-width: 300px; direction: ltr; }
-  .flag-badge { display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 10px; padding: 5px 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
-  .badge-img { height: 26px; width: auto; display: block; }
-  .org-logo { height: 30px; }
-  @media (max-width: 720px) { .affiliation-strip { position: static; justify-content: flex-start; margin-top: 12px; max-width: none; } }
+  .org-masthead { display: flex; align-items: center; justify-content: center; gap: 20px; background: #fff; padding: 12px 16px; direction: ltr; }
+  .masthead-img { height: 42px; width: auto; display: block; }
+  .masthead-logo { height: 52px; }
+  @media (max-width: 480px) { .masthead-img { height: 32px; } .masthead-logo { height: 40px; } .org-masthead { gap: 12px; } }
 </style>
 </head>
 <body>
   <!-- STREAMING_CHUNK:Rendering main resume container and header... -->
   <div class="resume">
     
+    <!-- Organizational masthead -->
+    <div class="org-masthead" aria-label="Organizational affiliation">
+      <img src="somalia-flag.png" alt="Somalia flag" class="masthead-img">
+      <img src="direct-aid-logo.png" alt="Direct Aid Society - Somalia" class="masthead-img masthead-logo">
+      <img src="kuwait-badge.png" alt="Kuwait is by your side" class="masthead-img">
+    </div>
+
     <!-- Floating Action Menu -->
     <div class="action-menu">
       <div class="lang-toggle" aria-label="Switch language">
@@ -432,11 +438,6 @@
           <path d="M88 130 C88 118, 100 108, 100 108 C100 108, 112 118, 112 130 C112 137, 106 142, 100 142 C94 142, 88 137, 88 130 Z" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
           <path d="M292 96 C292 84, 304 74, 304 74 C304 74, 316 84, 316 96 C316 103, 310 108, 304 108 C298 108, 292 103, 292 96 Z" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
         </svg>
-      </div>
-      <div class="affiliation-strip" aria-label="Organizational affiliation">
-        <span class="flag-badge" style="order:1;"><img src="somalia-flag.png" alt="Somalia flag" class="badge-img"></span>
-        <span class="flag-badge org-badge" style="order:2;"><img src="direct-aid-logo.png" alt="Direct Aid Society - Somalia" class="badge-img org-logo"></span>
-        <span class="flag-badge" style="order:3;"><img src="kuwait-badge.png" alt="Kuwait is by your side" class="badge-img"></span>
       </div>
       <div class="header-inner">
         <div class="portrait-shell" aria-label="Portrait of Mahdi Yussuf Abdi">
